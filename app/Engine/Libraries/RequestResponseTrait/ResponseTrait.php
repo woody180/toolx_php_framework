@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Engine\Libraries\RequestResponseTrait;
+
 trait ResponseTrait {
     
     public function getResponse() {
@@ -23,7 +25,7 @@ trait ResponseTrait {
 
     // Render veiw
     public function render(string $viewPath, array $arguments = []) {
-        $templates = new League\Plates\Engine(APPROOT . "/Views");
+        $templates = new \League\Plates\Engine(APPROOT . "/Views");
         echo $templates->render($viewPath, $arguments);
     }
 
