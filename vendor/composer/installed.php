@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'toolx/toolx-php-framework',
-        'pretty_version' => '1.0.0+no-version-set',
-        'version' => '1.0.0.0',
-        'reference' => NULL,
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
+        'reference' => '382eda533ec85300fdd38561b383a57b0d03036b',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -29,9 +29,9 @@
             'dev_requirement' => false,
         ),
         'toolx/toolx-php-framework' => array(
-            'pretty_version' => '1.0.0+no-version-set',
-            'version' => '1.0.0.0',
-            'reference' => NULL,
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
+            'reference' => '382eda533ec85300fdd38561b383a57b0d03036b',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
