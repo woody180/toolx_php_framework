@@ -52,38 +52,8 @@ foreach (AUTOBOOT_FILES as $file) {
 
 
 // Multilingual
-require_once APPROOT . "/Engine/Libraries/Languages.php";   
-if (MULTILINGUAL)
-{
-    require_once APPROOT . '/Engine/Libraries/LanguageLogic.php';
-    App\Engine\Libraries\LanguageLogic::start();
-}
+if (MULTILINGUAL) \App\Engine\Libraries\LanguageLogic::start();
 
-
-
-// Adding singeton patterns
-$singletones = glob(APPROOT . "/Singleton/*.php");
-foreach ($singletones as $st) require_once $st;
-
-
-
-
-
-// Include image resizer library
-foreach (LIBRARIES as $lib) {
-    require_once APPROOT . "/Engine/Libraries/{$lib}.php";
-}
-
-
-
-// Validation library
-require_once APPROOT . '/Engine/Libraries/Validation.php';
-
-// Router
-// require_once APPROOT . '/Engine/Libraries/Library.php';
-require_once APPROOT . '/Engine/Libraries/RequestResponseTrait/RequestTrait.php';
-require_once APPROOT . '/Engine/Libraries/RequestResponseTrait/ResponseTrait.php';
-require_once APPROOT . '/Engine/Libraries/Router.php';
 
 // CSRF Protection
 if (CSRF_PROTECTION) {
