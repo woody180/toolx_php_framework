@@ -1,0 +1,23 @@
+{
+    "name": "toolx/toolx-php-framework",
+    "description": "PHP Framework for creating PHP applications easily",
+    "homepage": "https://github.com/woody180/toolx_php_framework",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "woody180",
+            "email": "woody180@rocketmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "autoload": {
+        "psr-4": {
+            "app\\": "./app"
+        }
+    },
+    "require": {
+        "league/plates": "3.*",
+        "gumlet/php-image-resize": "2.0.*"
+    }
+}
