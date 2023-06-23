@@ -4,7 +4,7 @@ use \App\Engine\Libraries\Library;
 
 class Router {
     
-    use \RequestTrait, \ResponseTrait;
+    use \App\Engine\Libraries\RequestResponseTrait\RequestTrait, \App\Engine\Libraries\RequestResponseTrait\ResponseTrait;
     
     private $routes = [];
     private $request;
