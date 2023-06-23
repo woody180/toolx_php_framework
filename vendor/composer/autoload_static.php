@@ -7,10 +7,6 @@ namespace Composer\Autoload;
 class ComposerStaticInit089ec636617990e945824df8466c5e41
 {
     public static $prefixLengthsPsr4 = array (
-        'a' => 
-        array (
-            'app\\' => 4,
-        ),
         'L' => 
         array (
             'League\\Plates\\' => 14,
@@ -19,13 +15,13 @@ class ComposerStaticInit089ec636617990e945824df8466c5e41
         array (
             'Gumlet\\' => 7,
         ),
+        'A' => 
+        array (
+            'App\\' => 4,
+        ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'app\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/',
-        ),
         'League\\Plates\\' => 
         array (
             0 => __DIR__ . '/..' . '/league/plates/src',
@@ -33,6 +29,10 @@ class ComposerStaticInit089ec636617990e945824df8466c5e41
         'Gumlet\\' => 
         array (
             0 => __DIR__ . '/..' . '/gumlet/php-image-resize/lib',
+        ),
+        'App\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/app',
         ),
     );
 
