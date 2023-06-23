@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Engine\Libraries\RequestResponseTrait;
+
 trait RequestTrait {
     
     private $getMethod;
