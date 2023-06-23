@@ -6,7 +6,7 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
-    'app\\' => array($baseDir . '/'),
     'League\\Plates\\' => array($vendorDir . '/league/plates/src'),
     'Gumlet\\' => array($vendorDir . '/gumlet/php-image-resize/lib'),
+    'App\\' => array($baseDir . '/app'),
 );
