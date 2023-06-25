@@ -10,14 +10,16 @@
             "email": "woody180@rocketmail.com"
         }
     ],
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "autoload": {
         "psr-4": {
             "App\\": "app/"
         }
     },
     "require": {
-        "php": ">=7.4.0",
+        "php": ">=7.4.0"
+    },
+    "require-dev": {
         "league/plates": "3.*",
         "gumlet/php-image-resize": "2.0.*"
     }
