@@ -46,9 +46,7 @@ if (DATABASE) require_once APPROOT . "/Engine/Database/Initialization.php";
 
 
 // Load files on application boot
-foreach (AUTOBOOT_FILES as $file) {
-    require_once APPROOT . "/Boot/{$file}.php";
-}
+foreach (AUTOBOOT_FILES as $file) require_once APPROOT . "/Boot/{$file}.php";
 
 
 // Multilingual
