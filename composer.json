@@ -17,9 +17,7 @@
         }
     },
     "require": {
-        "php": ">=7.4.0"
-    },
-    "require-dev": {
+        "php": ">=7.4.0",
         "league/plates": "3.*",
         "gumlet/php-image-resize": "2.0.*"
     }
