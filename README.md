@@ -1,3 +1,12 @@
+# Installation
+
+## Installation with composer
+
+```
+composer create-project toolx/toolx-php-framework
+```
+
+
 # Starting server
 With your terminal open application root directory and fire: 
 ```
