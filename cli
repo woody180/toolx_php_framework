@@ -43,6 +43,24 @@ class Cli {
             echo self::$messages;
         }
     }
+    
+    
+    
+    // Clear cached views
+    private static function cache($arg) {
+        $lastSegment = strtolower(self::$argv[2]);
+        
+        if ($lastSegment === 'all') {
+            array_map('unlink', array_filter((array) glob(APPROOT . "/Cache/*.txt")));
+            echo "All cached files cleared successfully.";
+        } else {
+            array_map('unlink', array_filter((array) glob(APPROOT . "/Cache/{$lastSegment}_*.txt")));
+            echo "files under key - {$lastSegment} cleared successfully.";
+        }
+        
+    }
+
+
 
 
     // Create language list
