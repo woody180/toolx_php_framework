@@ -11,5 +11,6 @@
 
 CONST CUSTOM_HELPERS = [
     'htmlHelper',
-    'minifier/minifier'
+    'minifier/minifier',
+    //'auth/checkAuth'
 ];
