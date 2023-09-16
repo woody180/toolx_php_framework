@@ -27,6 +27,8 @@ trait ResponseTrait {
     
     
     public function getCached(string $cacheFileName) {
+
+        if (!CACHE_ENABLED) return FALSE;
         
         $dirPath = APPROOT . "/Cache";
         $arr = glob("{$dirPath}/{$cacheFileName}_*.txt");
@@ -65,6 +67,9 @@ trait ResponseTrait {
 
     // Cache views
     public function cache(string $key, int $time = 20) {
+
+        if (!CACHE_ENABLED) return FALSE;
+
         $timestamp = time() + $time;
         $cachePath = APPROOT . "/Cache/{$key}_{$timestamp}.txt";
         
