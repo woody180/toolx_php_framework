@@ -8,3 +8,4 @@ define("CSRF_PROTECTION", FALSE);
 define("CSRF_REFRESH", FALSE);
 define("MULTILINGUAL", FALSE);
 define("ENV", "development"); // Environment can be development or can be empty
+define("CACHE_ENABLED", FALSE);
