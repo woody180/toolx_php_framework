@@ -369,3 +369,11 @@ function getUserIP() {
         $ipaddress = 'UNKNOWN';
     return $ipaddress;
 }
+
+
+
+
+function clearCache() {
+    array_map('unlink', array_filter((array) glob(APPROOT . "/Cache/*.txt")));
+    return "All cached files cleared successfully.";
+}
