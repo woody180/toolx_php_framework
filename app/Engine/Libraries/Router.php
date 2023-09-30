@@ -9,15 +9,10 @@ class Router {
     private $routes = [];
     private $request;
     private static $instance = null;
-    
-    
-    private function dd($x)
-    {
-        echo '<pre>';
-        print_r($x);
-        echo '</pre>';
-        die;
-    }
+    private $currentController;
+    private $currentMethod;
+    private $viewPath;
+
     
     private function __construct() {
         $this->request = $this->getRequest();
