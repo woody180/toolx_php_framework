@@ -13,7 +13,7 @@ class Languages {
             $path = APPROOT . "/Engine/Language_base/languages.json";
             if (file_exists($path)) {
 
-                $languageList = json_decode(file_get_contents($path), true);
+                $languageList = json_decode(file_get_contents($path), true) ?? [];
 
                 foreach($languageList as $lg) {
                     if ($lg['primary'] === true) {
