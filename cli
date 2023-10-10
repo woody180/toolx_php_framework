@@ -77,7 +77,8 @@ class Cli {
             $langList = [];
             if (file_exists($path)) {
                 $langList = file_get_contents($path);
-                $langList = json_decode($langList, true);
+                if (!empty($langList)) $langList = json_decode($langList, true);
+                else $langList = [];
             }
 
             // Check if language already stored
