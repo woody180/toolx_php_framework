@@ -35,7 +35,7 @@ class Languages {
 
         self::construct();
         
-        $lang = isset($_SESSION['lang']) ? strtolower($_SESSION['lang']) : null;
+        $lang = isset($_SESSION['lang']) ? strtolower($_SESSION['lang']) : 'defaults';
         
         if (is_array($path)) {
             if (isset($path[$lang]))
