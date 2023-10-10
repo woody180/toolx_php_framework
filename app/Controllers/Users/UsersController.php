@@ -413,9 +413,9 @@ class UsersController {
                 ]);
                 R::store($user);
                 
-                $message = 'ვერიფიკაციის ბმული გამოიგზავნა მითითებულ ელ. ფოსტაზე. პაროლი შეიცვლება ვერიფიკაციის ბმულზე გადასვლის შემდეგ';
+                $message = \App\Engine\Libraries\Languages::translate('email.reset_verification_message');
                 
-                $emailMessage = 'პაროლის შესაცვლელად გამოყევი ბმულს.';
+                $emailMessage = \App\Engine\Libraries\Languages::translate('email.reset_post_message');
 
                 $mail = new PHPMailer(true);
                 try {
@@ -429,15 +429,15 @@ class UsersController {
                     );
                     
                     $mail->isSMTP();
-                    $mail->Host       = 'mail.magma.ge';
+                    $mail->Host       = MAIL_HOST;
                     $mail->SMTPAuth   = true;
-                    $mail->Username   = 'mail@magma.ge';
-                    $mail->Password   = 'jah4dKmM';
+                    $mail->Username   = MAIL_USERNAME;
+                    $mail->Password   = MAIL_PASSWORD;
                     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-                    $mail->Port       = 587;
+                    $mail->Port       = MAIL_PORT;
                 
                     //Recipients
-                    $mail->setFrom('mail@magma.ge', 'magma.ge');
+                    $mail->setFrom(AUTH_MAIL, AUTH_DOMAIN);
                     $mail->addAddress($req->body('email'));
                     
                     //Content
@@ -476,11 +476,11 @@ class UsersController {
                     R::store($user);
                     
                     unset($_SESSION["key_$verification"]);
-                    setFlashData('message', 'პაროლი წარმატებით შეიცვალა.');
+                    setFlashData('message', \App\Engine\Libraries\Languages::translate('email.password_change_success'));
                     return $res->redirect(baseUrl('users/login'));
                 } else {
                     
-                    setFlashData('error', 'არასწორი ვერიფიკაციის კოდი.');
+                    setFlashData('error', \App\Engine\Libraries\Languages::translate('email.wrong_verification_code'));
                     return $res->redirect(baseUrl('users/reset'));
                 }
             }
