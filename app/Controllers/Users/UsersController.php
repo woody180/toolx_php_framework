@@ -85,7 +85,7 @@ class UsersController {
         if (!$user) {
             setForm($body);
             setFlashData('errors', [
-                'email' => ['User not found!']
+                'email' => [\App\Engine\Libraries\Languages::translate('auth.user_not_found')]
             ]);
             return $res->redirectBack();
         }
@@ -94,7 +94,7 @@ class UsersController {
         if (!password_verify($req->body('password'), $user->password)) {
             setForm($body);
             setFlashData('errors', [
-                'password' => ['Wrong password!']
+                'password' => [\App\Engine\Libraries\Languages::translate('auth.wrong_password')]
             ]);
             return $res->redirectBack();
         }
@@ -102,7 +102,7 @@ class UsersController {
         // Check if user is activated
         if (!$user->activated) {
             setForm($body);
-            setFlashData('message', 'User is not activated');
+            setFlashData('message', \App\Engine\Libraries\Languages::translate('auth.user_not_activated'));
             return $res->redirectBack();
         }
 
@@ -177,14 +177,14 @@ class UsersController {
 
         // Check if password and password repeat fields match
         if ($req->body('password') != $req->body('password_repeat')) {
-            setFlashData('errors', ['password_repeat' => ['Password repeat field not match to the password field.']]);
+            setFlashData('errors', ['password_repeat' => [\App\Engine\Libraries\Languages::translate('auth.password_match_error')]]);
             setForm($body);
             return $res->redirectBack();
         }
 
         // Check if email is already taken
         if (R::findOne('users', 'email = ?', [$req->body('email')])) {
-            setFlashData('errors', ['email' => ['eMail is already taken.']]);
+            setFlashData('errors', ['email' => [\App\Engine\Libraries\Languages::translate('auth.mail_taken')]]);
             setForm($body);
             return $res->redirectBack();
         }
@@ -248,12 +248,12 @@ class UsersController {
             // }
 
 
-            setFlashData('success', 'User registered successfully!');
+            setFlashData('success', \App\Engine\Libraries\Languages::translate('auth.user_register_success'));
             delete_cookie('form');
             return $res->redirect(baseUrl('users/login'));
         }
 
-        setFlashData('message', 'Unknown error occured!');
+        setFlashData('message', \App\Engine\Libraries\Languages::translate('auth.unknown'));
         return $res->redirectBack();
     }
 
@@ -303,7 +303,7 @@ class UsersController {
         // Check if passwrod and if password match
         if ( !empty($req->body('password')) ) {
             if ($req->body('password') !== $req->body('password_repeat')) {
-                setFlashData('errors', ['password_repeat' => ['Password repeat field not match to the password field.']]);
+                setFlashData('errors', ['password_repeat' => [\App\Engine\Libraries\Languages::translate('auth.password_match_error')]]);
                 setForm($body);
                 return $res->redirectBack();
             } else {
@@ -333,7 +333,7 @@ class UsersController {
 
         // Check email
         if ($req->body('email') != $user->email && R::findOne('users', 'email = ?', [$req->body('email')])) {
-            setFlashData('errors', ['email' => ['This email is already taken.']]);
+            setFlashData('errors', ['email' => [\App\Engine\Libraries\Languages::translate('auth.mail_taken')]]);
             setForm($body);
             return $res->redirectBack();
         }
@@ -345,12 +345,12 @@ class UsersController {
 
         
         if ($done) {
-            setFlashData('success', 'Account updated successfully!');
+            setFlashData('success', \App\Engine\Libraries\Languages::translate('auth.account_update_success'));
             delete_cookie('form');
             return $res->redirectBack();
         }
 
-        setFlashData('message', 'Unknow error occurred');
+        setFlashData('message', \App\Engine\Libraries\Languages::translate('auth.unknown'));
         setForm($body);
         return $res->redirectBack();
     }
@@ -399,7 +399,7 @@ class UsersController {
 
                 if (!$user) {
                     setForm($body);
-                    setFlashData('errors', ['email' => ['Such user not found.']]);
+                    setFlashData('errors', ['email' => [\App\Engine\Libraries\Languages::translate('auth.user_not_found')]]);
                     return $res->redirectBack();
                 }
                 
@@ -413,9 +413,9 @@ class UsersController {
                 ]);
                 R::store($user);
                 
-                $message = \App\Engine\Libraries\Languages::translate('email.reset_verification_message');
+                $message = \App\Engine\Libraries\Languages::translate('auth.reset_verification_message');
                 
-                $emailMessage = \App\Engine\Libraries\Languages::translate('email.reset_post_message');
+                $emailMessage = \App\Engine\Libraries\Languages::translate('auth.reset_post_message');
 
                 $mail = new PHPMailer(true);
                 try {
@@ -476,11 +476,11 @@ class UsersController {
                     R::store($user);
                     
                     unset($_SESSION["key_$verification"]);
-                    setFlashData('message', \App\Engine\Libraries\Languages::translate('email.password_change_success'));
+                    setFlashData('message', \App\Engine\Libraries\Languages::translate('auth.password_change_success'));
                     return $res->redirect(baseUrl('users/login'));
                 } else {
                     
-                    setFlashData('error', \App\Engine\Libraries\Languages::translate('email.wrong_verification_code'));
+                    setFlashData('error', \App\Engine\Libraries\Languages::translate('auth.wrong_verification_code'));
                     return $res->redirect(baseUrl('users/reset'));
                 }
             }
