@@ -10,6 +10,7 @@ trait RequestTrait {
     private $url;
     private $isDone = false;
     private $data;
+    private $file;
 
 
 
