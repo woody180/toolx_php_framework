@@ -1,7 +1,7 @@
 <?php
 
 function checkAdmin() {
-    helpers(['Auth/checkAuth']);
+    helpers(['auth/checkAuth']);
     
     if (!checkAuth([1])) return abort();
 }
