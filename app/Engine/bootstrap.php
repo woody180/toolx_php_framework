@@ -8,7 +8,6 @@ require_once APPROOT . '/Config/database.php';
 require_once APPROOT . '/Config/app.php';
 require_once APPROOT . '/Config/routes.php';
 require_once APPROOT . '/Config/helpers.php';
-require_once APPROOT . '/Config/libraries.php';
 require_once APPROOT . '/Config/boot.php';
 require_once APPROOT . '/Config/css_compiler.php';
 require_once APPROOT . '/Config/mail.php';
