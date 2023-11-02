@@ -1,7 +1,5 @@
 <?php namespace App\Engine\Libraries;
 
-use \App\Engine\Libraries\Library;
-
 class Router {
     
     use \App\Engine\Libraries\RequestResponseTrait\RequestTrait, \App\Engine\Libraries\RequestResponseTrait\ResponseTrait;
