@@ -542,6 +542,34 @@ You can also translation within **html / view** file.
 ```
 
 
+## Language switcher route
+
+```
+$router->get('language/switch/(:alpha)', function($req, $res)
+{
+    $languageCode = urlSegments('last', TRUE);
+    $languagesList = App\Engine\Libraries\Languages::list();
+
+    // Check if language code exists in languages list
+    if (!array_search_index($languagesList, 'code', $languageCode, false)) return $res->redirectBack();
+
+    // Switch language
+    App\Engine\Libraries\Languages::switch($languageCode);
+
+    // Building redirect URL
+    $prevUrl = explode('/', getFlashData('previous_url'));
+    array_shift($prevUrl);
+    array_unshift($prevUrl, $languageCode);
+    $newurl = join('/',$prevUrl);
+    
+    if ($req->isAjax()) return $res->send(['url' => URLROOT . "/{$newurl}"]);
+    
+    return $res->redirect(URLROOT . "/{$newurl}");
+});
+
+```
+
+
 # Singleton pattern
 Create Singleton pattern with CLI
 ```
