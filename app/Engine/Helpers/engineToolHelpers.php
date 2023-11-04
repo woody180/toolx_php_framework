@@ -248,8 +248,8 @@ function orderArrayByArray(array $array, array $order) {
 
 function array_search_index(array $products, string $field, string $value, $index = true) {
     foreach($products as $key => $product) {
-        if ( $product[$field] == $value )
-            return $index ? $key : 1;
+        if (is_array($product)) if ( $product[$field] == $value ) return $index ? $key : 1;
+        if (is_object($product)) if ( $product->{$field} == $value ) return $index ? $key : 1;
     }
     return false;
 }
