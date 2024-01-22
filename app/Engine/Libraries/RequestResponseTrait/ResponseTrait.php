@@ -38,7 +38,7 @@ trait ResponseTrait {
                 $filename = pathinfo($name)['filename'];
                 $time_till_cache_expire = explode('_', $filename)[1];
                 
-                if( (time() - $time_till_cache_expire) > 0 ) {
+                if( (time() - (int)$time_till_cache_expire) > 0 ) {
                     unlink("{$dirPath}/{$filename}.txt");
                 } else {
                     $text = "";
