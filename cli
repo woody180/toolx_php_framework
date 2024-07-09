@@ -28,7 +28,14 @@ class Cli {
         }
             
 
-        self::$messages = "😤 try \n ➡  php cli make:controllers blog something \n ➡  php cli make:routes blog post \n ➡  php cli make:restful blog";
+        self::$messages = "\n😤 try\n\n";
+        self::$messages .= "➡  php cli make:controllers blog something\n";
+        self::$messages .= "➡  php cli make:routes blog post\n";
+        self::$messages .= "➡  php cli make:restful blog\n";
+        self::$messages .= "➡  php cli make:models modelname\n";
+        self::$messages .= "➡  php cli make:migration ModelName\n";
+        self::$messages .= "➡  php cli make:singleton className\n\n";
+        self::$messages .= "For more info visit: https://github.com/woody180/toolx_php_framework\n\n";
 
         if ( isset($argv[1]) ) {
             if (preg_match('/:/', $argv[1])) {
