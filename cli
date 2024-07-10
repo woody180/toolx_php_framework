@@ -29,12 +29,18 @@ class Cli {
             
 
         self::$messages = "\n😤 try\n\n";
-        self::$messages .= "➡  php cli make:controllers blog something\n";
-        self::$messages .= "➡  php cli make:routes blog post\n";
+        self::$messages .= "➡  php cli make:controllers filename methodName\n";
+        self::$messages .= "➡  php cli make:routes filename httpVerb\n";
         self::$messages .= "➡  php cli make:restful blog\n";
         self::$messages .= "➡  php cli make:models modelname\n";
         self::$messages .= "➡  php cli make:migration ModelName\n";
         self::$messages .= "➡  php cli make:singleton className\n\n";
+        self::$messages .= "Create languages: \n➡  php cli language:set english en --primary\n";
+        self::$messages .= "➡  php cli language:set georgian ge\n\n";
+        self::$messages .= "Set primary language: \n➡  php cli language:primary ge\n\n";
+        self::$messages .= "Get language list: \n➡  php cli language:list show\n\n";
+        self::$messages .= "Delete language: \n➡  php cli language:delete en\n\n";
+        self::$messages .= "Delete all languages: \n➡  php cli language:refresh all\n\n";
         self::$messages .= "For more info visit: https://github.com/woody180/toolx_php_framework\n\n";
 
         if ( isset($argv[1]) ) {
