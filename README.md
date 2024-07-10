@@ -483,7 +483,7 @@ For multilangual activation go to **app/Config/app.php** directory and set **MUL
 ### Creating languages list
 ```
 php cli language:set english en --primary
-php cli language:set english ge
+php cli language:set georgian ge
 ```
 
 ### Set primary language
