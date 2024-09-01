@@ -25,7 +25,7 @@ function img($params = [], $directPath = false) {
     $path = $directPath ? dirname(APPROOT) . "/public/assets/tinyeditor/filemanager/files/" . $src : dirname(APPROOT) . "/public/assets/" . $src;
     
     // Check if file exists
-    if (!file_exists($path)) {
+    if (!file_exists($path) || !strlen($src)) {
         $directPath = false;
         $src = "images/not-found.png";
     }
