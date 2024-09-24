@@ -120,8 +120,7 @@ function str2url($str, $options = array()) {
 
 function pager(array $params) {
 
-    $currentSiteUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-    $currentSiteUrl = explode('&page=', $currentSiteUrl)[0];
+    $currentSiteUrl = explode('&page=', CURRENT_URL)[0];
 
     if (strpos($currentSiteUrl, '?') && !strpos($currentSiteUrl, '?page')) {
         $currentSiteUrl = $currentSiteUrl . '&';
