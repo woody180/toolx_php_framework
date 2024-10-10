@@ -227,3 +227,10 @@ function abort(array $params = ["code" => 404, "url" => NULL, "text" => NULL]) {
     }
 
 }
+
+
+
+function redirect($url = null, $code = 302) {
+    if ($url === null) $url = baseUrl();
+    return header("Location: " . baseUrl($url), true, $code);
+}
