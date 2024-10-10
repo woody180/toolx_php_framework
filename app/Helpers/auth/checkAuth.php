@@ -9,6 +9,8 @@ function checkAuth(array $privilegies = []) {
 
         $user = R::findOne('users', 'id = ?', [$id]);
 
+        if (is_null($user)) unset($_SESSION['userid']);
+
         if (!empty($privilegies)) {
             if (in_array($user->usergroups->id, $privilegies))
                 return true;
