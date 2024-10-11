@@ -8,8 +8,8 @@
                 <div class="uk-card-body">
                     
                     <div class="uk-flex uk-flex-between uk-flex-middle">
-                        <p class="uk-text-lead">Update account</p>
-                        <a href="<?= baseUrl("users/profile/" . $_SESSION['userid']) ?>"><span uk-icon="icon: arrow-left; ratio: 1"></span> Go to profile page</a>
+                        <p class="uk-text-lead"><?= lang('auth.profile_edit') ?></p>
+                        <a href="<?= baseUrl("users/profile/" . $_SESSION['userid']) ?>"><span uk-icon="icon: arrow-left; ratio: 1"></span> <?= lang('auth.back_to_profile') ?></a>
                     </div>
                     
                     <?php if (hasFlashData('error')): ?>
@@ -38,53 +38,53 @@
                         <?= csrf_field() ?>
                         
                         <div>
-                            <label for="name" class="uk-form-label">Name</label>
+                            <label for="name" class="uk-form-label"><?= lang('auth.name') ?></label>
                             <input id="name" type="text" name="name" class="uk-input" value="<?= $user->name ?>">
                             <p class="uk-margin-remove uk-text-danger uk-text-small"><?= implode(', ', getFlashData('errors')->name ?? []) ?></p>
                         </div>
                         
                         <div>
-                            <label for="username" class="uk-form-label">Username</label>
+                            <label for="username" class="uk-form-label"><?= lang('auth.username') ?></label>
                             <input id="username" type="text" name="username" class="uk-input" value="<?= $user->username ?>">
                             <p class="uk-margin-remove uk-text-danger uk-text-small"><?= implode(', ', getFlashData('errors')->username ?? []) ?></p>
                         </div>
                         
                         <div>
-                            <label for="email" class="uk-form-label">eMail</label>
+                            <label for="email" class="uk-form-label"><?= lang('auth.email') ?></label>
                             <input id="email" type="email" name="email" class="uk-input" value="<?= $user->email ?>">
                             <p class="uk-margin-remove uk-text-danger uk-text-small"><?= implode(', ', getFlashData('errors')->email ?? []) ?></p>
                         </div>
                         
                         <div>
                             <input type="hidden" name="avatar_hidden" value="<?= $user->avatar ?>">
-                            <label for="" class="uk-form-label">Profile image</label>
+                            <label for="" class="uk-form-label"><?= lang('auth.choose_avatar') ?></label>
                             <div class="uk-placeholder uk-margin-remove uk-text-center">
                                 <span uk-icon="icon: cloud-upload"></span>
-                                <span class="uk-text-middle">Set profile image -</span>
+                                <span class="uk-text-middle"><?= lang('auth.set_profile_image') ?> -</span>
                                 <div uk-form-custom>
                                     <input name="avatar" type="file">
-                                    <span class="uk-link">Select avatar</span>
+                                    <span class="uk-link"><?= lang('auth.choose_avatar') ?></span>
                                 </div>
                             </div>
                             <p class="uk-margin-remove uk-text-danger uk-text-small"><?= implode(', ', getFlashData('errors')->avatar ?? []) ?></p>
                         </div>
                     
                         <div>
-                            <label for="password" class="uk-form-label">Password</label>
+                            <label for="password" class="uk-form-label"><?= lang('auth.password') ?></label>
                             <input id="password" type="password" name="password" class="uk-input" value="">
                             <p class="uk-margin-remove uk-text-danger uk-text-small"><?= implode(', ', getFlashData('errors')->password ?? []) ?></p>
                         </div>
                         
                         <div>
-                            <label for="password" class="uk-form-label">Password repeat</label>
+                            <label for="password" class="uk-form-label"><?= lang('auth.repeat_password') ?></label>
                             <input id="password" type="password" name="password_repeat" class="uk-input" value="">
                             <p class="uk-margin-remove uk-text-danger uk-text-small"><?= implode(', ', getFlashData('errors')->password_repeat ?? []) ?></p>
                         </div>
                         
                         <div id="account-buttons-set" class="uk-flex uk-flex-between uk-flex-middle">
-                            <button class="uk-button uk-button-primary" type="submit">Update account</button>
+                            <button class="uk-button uk-button-primary" type="submit"><?= lang('auth.update_profile') ?></button>
                             
-                            <a href="<?= baseUrl("users/profile/" . $_SESSION['userid']) ?>"><span uk-icon="icon: arrow-left; ratio: 1"></span> Go to profile page</a>
+                            <a href="<?= baseUrl("users/profile/" . $_SESSION['userid']) ?>"><span uk-icon="icon: arrow-left; ratio: 1"></span> <?= lang('auth.back_to_profile') ?></a>
                         </div>
                     </form>
                 </div>

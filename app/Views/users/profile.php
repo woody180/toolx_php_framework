@@ -24,29 +24,29 @@
                 <?php if ($isSelf): ?>
                 <div class="uk-flex uk-flex-center uk-margin-bottom uk-flex-1">
                     <div>
-                        <a uk-tooltip="Home" class="uk-button uk-button-group uk-button-default uk-padding-small uk-button-small uk-margin-remove" href="<?= baseUrl() ?>" uk-icon="icon: home; ratio: .8;"></a>
-                        <a uk-tooltip="Edit profile" class="uk-button uk-button-group uk-button-default uk-padding-small uk-button-small uk-margin-remove" href="<?= baseUrl("users/account/" . urlSegments(3)) ?>" uk-icon="icon: pencil; ratio: .8;"></a>
-                        <a uk-tooltip="Logout" class="uk-button uk-button-group uk-button-default uk-padding-small uk-button-small uk-margin-remove" href="<?= baseUrl("users/logout") ?>" uk-icon="icon: sign-out; ratio: .8;"></a>
+                        <a uk-tooltip="<?= lang('auth.home') ?>" class="uk-button uk-button-group uk-button-default uk-padding-small uk-button-small uk-margin-remove" href="<?= baseUrl() ?>" uk-icon="icon: home; ratio: .8;"></a>
+                        <a uk-tooltip="<?= lang('auth.profile_edit') ?>" class="uk-button uk-button-group uk-button-default uk-padding-small uk-button-small uk-margin-remove" href="<?= baseUrl("users/account/" . urlSegments('last')) ?>" uk-icon="icon: pencil; ratio: .8;"></a>
+                        <a uk-tooltip="<?= lang('auth.logout') ?>" class="uk-button uk-button-group uk-button-default uk-padding-small uk-button-small uk-margin-remove" href="<?= baseUrl("users/logout") ?>" uk-icon="icon: sign-out; ratio: .8;"></a>
                     </div>
                 </div>
                 <?php endif; ?>
                 
                 <ul class="uk-margin-remove uk-padding-remove uk-list uk-list-divider uk-list-hyphen uk-flex-1 uk-width-1-1">
                     <li>
-                        <b>Name</b>: 
+                        <b><?= lang('auth.name') ?></b>: 
                         <i><?= $user->name ?></i>
                     </li>
                     <li>
-                        <b>Username</b>: 
+                        <b><?= lang('auth.username') ?></b>: 
                         <i><?= $user->username ?></i>
                     </li>
                     <li>
-                        <b>eMail</b>: 
+                        <b><?= lang('auth.email') ?></b>: 
                         <i><?= $user->email ?></i>
                     </li>
                     <li>
-                        <b>Group</b>: 
-                        <i><?= $user->groups->name ?></i>
+                        <b><?= lang('auth.usergroup') ?></b>: 
+                        <i><?= $user->usergroups->name ?></i>
                     </li>
                 </ul>
             </div>
