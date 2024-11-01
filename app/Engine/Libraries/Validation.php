@@ -18,6 +18,7 @@
  * required
  * valid_input
  * string
+ * phone
  * 
  * To make it work
  * $valiate = $validation
@@ -212,6 +213,24 @@ class Validation {
             }
         }
         
+
+        
+        if ($param === 'phone') {
+            
+            if (!empty($bodyVal)) {
+                if (!is_array($bodyVal)) {
+                    if (!preg_match('/^(\+?\d{1,3}[- ]?)?$?\d{1,4}?$?[- ]?\d{1,4}[- ]?\d{1,4}[- ]?\d{1,9}$/', $bodyVal))
+                        $this->errors[$name][] = "Invalid $readableName address!";
+                } else {
+                    foreach ($bodyVal as $val) {
+                        if (!preg_match('/^(\+?\d{1,3}[- ]?)?$?\d{1,4}?$?[- ]?\d{1,4}[- ]?\d{1,4}[- ]?\d{1,9}$/', $val))
+                            $this->errors[$name][] = "Invalid $readableName address!";
+                    }
+                }
+            }
+        }
+        
+
         
         if ($param === 'valid_url') {
             

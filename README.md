@@ -427,22 +427,23 @@ $router->post('api/one', function($req, $res) {
 ```
 
 ## Available validators
-- alpha
-- alpha_spaces
-- alpha_num_spaces
-- numeric
-- alpha_num
-- valid_email
-- valid_url
-- valid_slug
-- min[]
-- max[]
-- ext[jpg,jpeg,gif,bmp]
-- min_size[20000]
-- max_size[200000]
-- required
-- valid_input
-- string
+- alpha // Only alphabetical characters (without anything else)
+- alpha_spaces // Only alphabetical characters & spaces
+- alpha_num_spaces // Only alphabetical, numeric & spaces
+- numeric // Only numeric characters
+- alpha_num // Only alphabetical & numeric characters
+- valid_email // Check email
+- valid_url // Validates url
+- valid_slug // Validates slug
+- min[] // Minimum length
+- max[] // Maximum length
+- ext[jpg,jpeg,gif,bmp] // Check extension
+- min_size[20000] // Check file minimum size
+- max_size[200000] // Check file maximum size
+- required // Makes field required
+- valid_input // Default validation, checks for unsecure characters
+- string // Check for string
+- phone // Validation phone number
 
 ## Field error message
 ```
