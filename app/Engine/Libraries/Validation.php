@@ -216,15 +216,15 @@ class Validation {
 
         
         if ($param === 'phone') {
-            
+            $pattern = "/^\+?[1-9]\d{1,14}$|^\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}$/";
             if (!empty($bodyVal)) {
                 if (!is_array($bodyVal)) {
-                    if (!preg_match('/^(\+?\d{1,3}[- ]?)?$?\d{1,4}?$?[- ]?\d{1,4}[- ]?\d{1,4}[- ]?\d{1,9}$/', $bodyVal))
-                        $this->errors[$name][] = "Invalid $readableName address!";
-                } else {
+                    if (!preg_match($pattern, $bodyVal))
+                    $this->errors[$name][] = "Invalid $readableName number!";
+            } else {
                     foreach ($bodyVal as $val) {
-                        if (!preg_match('/^(\+?\d{1,3}[- ]?)?$?\d{1,4}?$?[- ]?\d{1,4}[- ]?\d{1,4}[- ]?\d{1,9}$/', $val))
-                            $this->errors[$name][] = "Invalid $readableName address!";
+                        if (!preg_match($pattern, $val))
+                            $this->errors[$name][] = "Invalid $readableName number!";
                     }
                 }
             }
