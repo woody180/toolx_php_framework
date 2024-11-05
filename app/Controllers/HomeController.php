@@ -11,4 +11,14 @@ class HomeController {
             'title' => 'APP Title'
         ]);
     }
+
+
+    public function about($req, $res) {
+        return $res->send('about');
+    }
+
+    
+    public function gallery($req, $res) {
+        return $res->send('gallery page');
+    }
 }
