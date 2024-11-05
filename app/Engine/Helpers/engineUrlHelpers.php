@@ -234,3 +234,31 @@ function redirect($url = null, $code = 302) {
     if ($url === null) $url = baseUrl();
     return header("Location: " . baseUrl($url), true, $code);
 }
+
+
+function url_to(string $controller_method, ...$segmetns) {
+
+    $segments = $segmetns;
+
+    $routes = \App\Engine\Libraries\Router::getRoutes();
+    $url = null;
+    $patterns = [
+        '(:any)', '(:num)', '(:alpha)', '(:alphanum)', '(:segment)', '(:continue)',
+    ];
+
+    foreach ($routes['get'] as $route => $value) {
+        if (in_array($controller_method, $value)) {
+            foreach ($patterns as $pattern) {
+                if (strpos($route, $pattern) !== false) {
+                    $route = preg_replace('/' . preg_quote($pattern, '/') . '/', array_pop($segments), $route, 1);
+                }
+            }
+
+            $url = $route;
+            break;
+        }
+    }
+
+    return baseUrl($url);
+
+}
