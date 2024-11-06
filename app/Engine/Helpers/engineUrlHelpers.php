@@ -247,9 +247,11 @@ function url_to(string $controller_method, ...$segmetns) {
     ];
 
     foreach ($routes['get'] as $route => $value) {
-        if (in_array($controller_method, $value)) {
+        
+        if ($value[0] === $controller_method) {
+
             foreach ($patterns as $pattern) {
-                if (strpos($route, $pattern) !== false) {
+                if (strpos($route, $pattern)) {
                     $route = preg_replace('/' . preg_quote($pattern, '/') . '/', array_pop($segments), $route, 1);
                 }
             }
