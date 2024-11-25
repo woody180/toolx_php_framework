@@ -48,8 +48,12 @@ class Languages {
         $pathArr = explode('.', $path);
 
         $filePath = APPROOT . "/Languages/{$lang}/{$pathArr[0]}.php";
+        $defaultPath = APPROOT . "/Languages/defaults/{$pathArr[0]}.php";
+        
         if (file_exists($filePath))
             $content = include(APPROOT . "/Languages/{$lang}/{$pathArr[0]}.php");
+        elseif (file_exists($defaultPath))
+            $content = include(APPROOT . "/Languages/defaults/{$pathArr[0]}.php");
 
         return $content[end($pathArr)] ?? null;
     }
