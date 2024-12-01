@@ -46,35 +46,35 @@ function urlSegments($index = null, bool $removeQuery = false) {
 }
 
 
-function baseUrl(string $url = null, $withLanguageCode = false) {
-    
+function baseUrl(string $url = '', $withLanguageCode = false) {
+
     if (MULTILINGUAL) $withLanguageCode = true;
-    
+
     if (MULTILINGUAL && $withLanguageCode) {
-        if ($url)
+        if (!empty($url))
             return URLROOT . '/' . \App\Engine\Libraries\Languages::active() . '/' . $url;
         else
             return URLROOT . '/' . \App\Engine\Libraries\Languages::active();
     }
-    
-    if ($url)
+
+    if (!empty($url))
         return URLROOT . '/' . $url;
     else
         return URLROOT;
 }
 
 
-function assetsUrl(string $url = null) {
+function assetsUrl(string $url = '') {
 
-    $publicUrl = $url ? '/' . $url : '';
+    $publicUrl = $url !== '' ? '/' . $url : '';
     return PUBLIC_DIR . $publicUrl;
 }
 
 
-function query(string $key = null) {
+function query(string $key = '') {
     // Query string
     preg_match_all('/[\?](.*)[\/]?+/', CURRENT_URL, $queryString);
-    $queryStr = null;
+    $queryStr = ''; // can't be null in php 8.4.1
 
     if ( isset($queryString[0]) && isset($queryString[0][0]) ) {
         parse_str($queryString[1][0], $queryArr);

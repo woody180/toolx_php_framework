@@ -219,10 +219,9 @@ class Cli {
     }
 
 
-    private static function make(string $fileType, string $fileName, string $param = null) {
+    private static function make(string $fileType, string $fileName, ?string $param = null) {
 
         $type = ucfirst($fileType);
-
 
         // print_r($fileType . "\n");
         // die;
@@ -234,7 +233,6 @@ class Cli {
             die("✔ - Singleton file - \"{$fileName}\" created successfully. \n");
         }
 
-
         // If type is restful
         if ($fileType === 'restful') {
 
@@ -242,13 +240,11 @@ class Cli {
             self::restRoute($fileName);
 
             // Make routes directory with route files
-                
             self::restControllerClean($fileName);
      
             die("✔ - Restful Route and Conttoller were created \n");
         }
 
-        
         // Check dir
         if (preg_match('/[\/]/', $fileName)) {
 
@@ -284,7 +280,7 @@ class Cli {
         
 
         // Get file content
-        $boilerPlate = call_user_func(['Cli', ucfirst($fileType)], ucfirst($fileName), $type, $param);
+        $boilerPlate = call_user_func(['Cli', ucfirst($fileType)], ucfirst($fileName), $type, $param ?? '');
         if ($fileType === 'models') $fileName = '';
 
         // Create file with content
