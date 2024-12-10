@@ -261,6 +261,7 @@ function url_to(string $controller_method, ...$segmetns) {
         }
     }
 
-    return baseUrl($url);
+    if (!is_null($url)) return baseUrl($url);
+    return null;
 
 }
