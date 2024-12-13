@@ -25,7 +25,7 @@ function img($params = [], $directPath = false) {
     $path = $directPath ? dirname(APPROOT) . "/public/assets/tinyeditor/filemanager/files/" . $src : dirname(APPROOT) . "/public/assets/" . $src;
     
     // Check if file exists
-    if (!file_exists(urldecode($path)) || !strlen($src)) {
+    if (!file_exists($path)) {
         $directPath = false;
         $src = "images/not-found.png";
     }
@@ -35,12 +35,14 @@ function img($params = [], $directPath = false) {
     $width = isset($params['width']) ? 'width="'.$params['width'].'"' : '';
     $height = isset($params['height']) ? 'height="'.$params['height'].'"' : '';
     $class = isset($params['class']) ? 'class="'.$params['class'].'"' : '';
+    $title = isset($params['title']) ? 'title="'.$params['title'].'"' : '';
+    $id = isset($params['id']) ? 'id="'.$params['id'].'"' : '';
 
     if ($directPath) {
-        $newSrc = assetsUrl("tinyeditor/filemanager/files/{$src}");
-        return "<img {$class} {$width} {$height} src=\"".assetsUrl('tinyeditor/filemanager/files/'.$src.'')."\" {$alt} />";
+        $newSrc = baseUrl("assets/tinyeditor/filemanager/files/{$src}");
+        return "<img {$id} {$class} {$width} {$height} src=\"".baseUrl('assets/tinyeditor/filemanager/files/'.$src.'')."\" {$alt} {$title} />";
     }
-    return "<img {$class} {$width} {$height} src=\"".assetsUrl("$src")."\" {$alt} />";
+    return "<img {$id} {$class} {$width} {$height} src=\"".baseUrl("assets/$src")."\" {$alt} {$title} />";
 }
 
 
