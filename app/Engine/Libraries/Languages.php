@@ -124,6 +124,6 @@ class Languages {
             }
         }
         
-        return $_SESSION['lang'];
+        return $_SESSION['lang'] ?? null;
     }
 }
