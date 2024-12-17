@@ -39,10 +39,10 @@ function img($params = [], $directPath = false) {
     $id = isset($params['id']) ? 'id="'.$params['id'].'"' : '';
 
     if ($directPath) {
-        $newSrc = baseUrl("assets/tinyeditor/filemanager/files/{$src}");
-        return "<img {$id} {$class} {$width} {$height} src=\"".baseUrl('assets/tinyeditor/filemanager/files/'.$src.'')."\" {$alt} {$title} />";
+        $newSrc = assetsUrl("tinyeditor/filemanager/files/{$src}");
+        return "<img {$id} {$class} {$width} {$height} src=\"".assetsUrl('tinyeditor/filemanager/files/'.$src.'')."\" {$alt} {$title} />";
     }
-    return "<img {$id} {$class} {$width} {$height} src=\"".baseUrl("assets/$src")."\" {$alt} {$title} />";
+    return "<img {$id} {$class} {$width} {$height} src=\"".assetsUrl("$src")."\" {$alt} {$title} />";
 }
 
 
