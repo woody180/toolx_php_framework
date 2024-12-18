@@ -112,7 +112,7 @@ Rotues will be search in app\Routes\Back and app\Routes\Front - automatically.
 
 # Controller
 
-The simplest way to create a controller is by using a CLI command ```php cli make:controller controllerName```.
+The simplest way to create a controller is by using a CLI command ```php cli make:controllers ControllerName```.
 Controllers are located in the **app/Controllers** directory.
 Name convention is **PascalCase**.
 Controller requires namespace. File name must correspond to controller name. If fox example file name is **HomeController.php** then namespace must be **App\Controllers\HomeController**
