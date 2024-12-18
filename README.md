@@ -58,6 +58,19 @@ $router->get('/', function($req, $res) {
 });
 ```
 
+## Bind route to controller
+
+```
+$router->get('/', 'HomeController@index');
+```
+
+## Adding middlewares
+
+```
+$router->get('/', 'HomeController@index', ['Middlewares/auth']);
+```
+It is possible to add multiple middlewares.
+
 ## Load routes from directories
 
 Sometimes, if you need to have too many routes, it is more comfortable to has them in additional directories. In order to load those additional directories you need to go to ```app/Config/routes.php``` file and load separate directories from there.
@@ -96,6 +109,37 @@ Add route path without app\Routes directory
 ```['Back', 'Front']```
 
 Rotues will be search in app\Routes\Back and app\Routes\Front - automatically.
+
+# Controller
+
+The simplest way to create a controller is by using a CLI command ```php cli make:controller controllerName```.
+Controllers are located in the **app/Controllers** directory.
+Name convention is **PascalCase**.
+Controller requires namespace. File name must correspond to controller name. If fox example file name is **HomeController.php** then namespace must be **App\Controllers\HomeController**
+
+```
+<?php namespace App\Controllers;
+class HomeController {
+
+    public function index($req, $res) {
+
+        return $res->render('welcome', [
+            'title' => 'APP Title'
+        ]);
+    }
+}
+```
+
+## Creating direct link (href) to the controllers methods.
+There is a hendy function called **url_to** which allows you to create direct links to the controllers methods.
+
+```
+// HomeController - is the controller name and index - is the method
+<a href="<?= url_to('HomeController@index') ?>">Go to home page</a> // Result is: http://localhost/home
+<a href="<?= url_to('HomeController@about') ?>">Go to about page</a> // Result is: http://localhost/about
+```
+One thing to consider while using this (url_to) function is that you must bind controller and method to the route ``` $router->get('/', 'HomeController@index'); ```. This (url_to) function **won't work with closures** ``` $router->get('/', function($req, $res) {}); ```
+
 
 # Users
 There are pre-defined users route. To load this route file you need to go to the ```app/Config/routes.php``` file and load this routes directory from there.
