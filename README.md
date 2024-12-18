@@ -58,7 +58,7 @@ $router->get('/', function($req, $res) {
 });
 ```
 
-## Bind route to controller
+## Bind controller to route
 
 ```
 $router->get('/', 'HomeController@index');
