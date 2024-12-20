@@ -110,6 +110,14 @@ Add route path without app\Routes directory
 
 Rotues will be search in app\Routes\Back and app\Routes\Front - automatically.
 
+## Users route
+There are pre-defined users route. To load this route file you need to go to the ```app/Config/routes.php``` file and load this routes directory from there.
+
+**UsersController.php** file is using php mailer for reseting password method and php resizer. Both of them are inside the **composer.json** file.
+
+User views file are also pre-defined inside the `app/Views/users` directory.
+
+
 # Controller
 
 The simplest way to create a controller is by using a CLI command ```php cli make:controllers ControllerName```.
@@ -129,24 +137,6 @@ class HomeController {
     }
 }
 ```
-
-## Creating direct link (href) to the controllers methods.
-There is a hendy function called **url_to** which allows you to create direct links to the controllers methods.
-
-```
-// HomeController - is the controller name and index - is the method
-<a href="<?= url_to('HomeController@index') ?>">Go to home page</a> // Result is: http://localhost/home
-<a href="<?= url_to('HomeController@about') ?>">Go to about page</a> // Result is: http://localhost/about
-```
-One thing to consider while using this (url_to) function is that you must bind controller and method to the route ``` $router->get('/', 'HomeController@index'); ```. This (url_to) function **won't work with closures** ``` $router->get('/', function($req, $res) {}); ```
-
-
-# Users
-There are pre-defined users route. To load this route file you need to go to the ```app/Config/routes.php``` file and load this routes directory from there.
-
-**UsersController.php** file is using php mailer for reseting password method and php resizer. Both of them are inside the **composer.json** file.
-
-User views file are also pre-defined inside the `app/Views/users` directory.
 
 # Models
 
@@ -371,6 +361,17 @@ For example you current url is **http://sitename.com/users/login**:
 ```
 <?= query() // Takes optional numeric argument ?>
 ```
+
+## Creating direct link from Controller and its method.
+There is a hendy function called **url_to** which allows you to create direct links to the controllers methods.
+
+```
+// HomeController - is the controller name and index - is the method
+<a href="<?= url_to('HomeController@index') ?>">Go to home page</a> // Result is: http://localhost/home
+<a href="<?= url_to('HomeController@about') ?>">Go to about page</a> // Result is: http://localhost/about
+```
+One thing to consider while using this (url_to) function is that you must bind controller and method to the route ``` $router->get('/', 'HomeController@index'); ```. This (url_to) function **won't work with closures** ``` $router->get('/', function($req, $res) {}); ```
+
 
 # Middlewares
 
