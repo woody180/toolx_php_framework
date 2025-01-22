@@ -655,9 +655,13 @@ $pages = R::find("pages", "order by timestamp asc limit $limit offset $offset");
 
 # Helper functions
 
-- str2url(string); // Takes string as argument
+- str2url(string); // Takes any type of unicode string as argument and returns url
 - urlSegments(int $index = null, bool $removeQuery = false);
 - pager(array);
+- img(['class', 'id', 'src', 'alt', 'width', 'height']); // Create img tag
+- base64_to_jpeg(); // Takes base64 string as argument and returns image
+- limit_words($string, $limit = 30); // Takes string as argument and returns limited words
+- youtubeVid($youtube_video_url, $width = '640', $height = '360'); // Takes youtube video url as argument and returns embed code (HTML iframe)
 - rrmdir(string); // Takes directory path as argument
 - isJSON(string); // Check if json
 - toJSON(array); // Array to json
@@ -671,6 +675,7 @@ $pages = R::find("pages", "order by timestamp asc limit $limit offset $offset");
 - hasFlashData(string $key);
 - getFlashData(string $key);
 - getUserIP();
+- get_time_ago($timestamp); // Takes timestamp as argument and returns 'time ago'
 
 
 # CLI
