@@ -76,8 +76,26 @@ class Router {
     // Placeholder to regex
     protected function checkPatternMatch() {
         $routes = [];
-        
+
+        // dd($this->routes[$this->request->getMethod()]);
+
         foreach ($this->routes[$this->request->getMethod()] as $route => $method) {
+            // Check if route has comma in it
+            if (strpos($route, ',')) {
+
+                // Explode route
+                $newRoutes = array_map('trim', explode(',', $route));
+
+                // Remove from route array
+                unset($this->routes[$this->request->getMethod()][$route]);
+
+                // Add new routes to $this->routes array
+                foreach ($newRoutes as $newRoute) $this->routes[$this->request->getMethod()][$newRoute] = $method;
+            }
+        }
+
+        foreach ($this->routes[$this->request->getMethod()] as $route => $method) {
+
             $url = str_replace('/', '\/', $route);
             $url = str_replace('(:continue)', '[\p{L}\w\-_].*', $url);          // Continues segment
             $url = str_replace('(:num)', '\d+', $url);                          // Only numbers
