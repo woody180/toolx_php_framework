@@ -64,6 +64,11 @@ $router->get('/', function($req, $res) {
 $router->get('/', 'HomeController@index');
 ```
 
+## Bind multiple URLs to the same controller method or closure.
+```
+$router->get('snow-fall, like-snow, snowfall, snow, fall', 'HomeController@index');
+```
+
 ## Adding middlewares
 
 ```
