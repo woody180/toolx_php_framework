@@ -213,10 +213,44 @@ class Validation {
             }
         }
         
+        
+        
+        if ($param === 'number_dot_space') {
+            
+            if (!empty($bodyVal)) {
+                if (!is_array($bodyVal)) {
+                    if (!preg_match('/^[0-9.\s]+$/', $bodyVal))
+                        $this->errors[$name][] = "Invalid $readableName format! Only numbers, dots, and spaces are allowed.";
+                } else {
+                    foreach ($bodyVal as $val) {
+                        if (!preg_match('/^[0-9.\s]+$/', $val))
+                            $this->errors[$name][] = "Invalid $readableName format! Only numbers, dots, and spaces are allowed.";
+                    }
+                }
+            }
+        }
+        
+        
+        
+        if ($param === 'numbers_letters') {
+            
+            if (!empty($bodyVal)) {
+                if (!is_array($bodyVal)) {
+                    if (!preg_match('/^[\p{L}\p{N}\s]+$/u', $bodyVal))
+                        $this->errors[$name][] = "Invalid $readableName format! Only numbers, letters, and spaces are allowed.";
+                } else {
+                    foreach ($bodyVal as $val) {
+                        if (!preg_match('/^[\p{L}\p{N}\s]+$/u', $val))
+                            $this->errors[$name][] = "Invalid $readableName format! Only numbers, letters, and spaces are allowed.";
+                    }
+                }
+            }
+        }
+        
 
         
         if ($param === 'phone') {
-            $pattern = "/^\+?[1-9]\d{1,14}$|^\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}$/";
+            $pattern = "/^\+?[0-9]{1,4}?[-.\s]?(\(?\d{1,3}\)?[-.\s]?)?[\d\-.\s]{4,15}$/";
             if (!empty($bodyVal)) {
                 if (!is_array($bodyVal)) {
                     if (!preg_match($pattern, $bodyVal))
