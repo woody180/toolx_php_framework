@@ -19,6 +19,7 @@
  * valid_input
  * string
  * phone
+ * valid_json
  * 
  * To make it work
  * $valiate = $validation
@@ -321,6 +322,26 @@ class Validation {
                             }
                         } else if (!empty($partTwo) && !in_array($partOne, $validParts)) {
                             $this->errors[$name][] = 'Url is invalid';
+                        }
+                    }
+                }
+            }
+        }
+
+
+
+        if ($param === 'valid_json') {
+            if (!empty($bodyVal)) {
+                if (!is_array($bodyVal)) {
+                    json_decode($bodyVal);
+                    if (json_last_error() !== JSON_ERROR_NONE) {
+                        $this->errors[$name][] = "$readableName field must be valid JSON!";
+                    }
+                } else {
+                    foreach ($bodyVal as $val) {
+                        json_decode($val);
+                        if (json_last_error() !== JSON_ERROR_NONE) {
+                            $this->errors[$name][] = "$readableName field must be valid JSON!";
                         }
                     }
                 }
