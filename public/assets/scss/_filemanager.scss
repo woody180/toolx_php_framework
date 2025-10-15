@@ -35,6 +35,13 @@
         width: calc(100% - 60px);
         left: 50%;
         transform: translateX(-50%);
+
+        button.uk-button {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 40px;
+        }
     }
 
     #fl-modal-data {
@@ -85,20 +92,25 @@
 
         .uk-icon {
             position: relative;
-            top: -1px;
+            // top: -1px;
         }
 
         &#fl-insert-button {
             padding-left: 10px;
-            .uk-icon {
-                left: 3px;
-            }
+            // .uk-icon {
+            //     left: 3px;
+            // }
         }
 
         &#fl-download-selected {
-            .uk-icon {
-                left: 2px;
-            }
+            // .uk-icon {
+            //     left: 2px;
+            // }
+        }
+
+        &#fl-remove-selected.active {
+            background-color: #d13232 !important;
+            border-color: #d13232 !important;
         }
     }
 
@@ -290,7 +302,7 @@ img.fl-item-image {
     & > .uk-icon {
         position: relative;
         top: 0;
-        margin-right: 3px !important;
+        // margin-right: 3px !important;
     }
 }
 

@@ -369,7 +369,9 @@ class FileManagerController {
         
         foreach ($req->body('items') as $item) {
             $directory = dirname(APPROOT) . "/public$item";
-            $cachedDirectory = dirname(APPROOT) . "/public/.cache$item";
+            $basename = basename($item);
+            $cachedDirectory = dirname(APPROOT) . "/public" . str_replace($basename, '.cache', $item) . '/' . $basename;
+
             if (is_file($directory)) {
                 unlink($directory);
                 
