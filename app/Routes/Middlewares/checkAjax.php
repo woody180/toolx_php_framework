@@ -5,5 +5,5 @@ function checkAjax() {
         return true;
     }
 
-    abort();
+    abort(['code' => 403, 'text' => 'Incorrect request. Ajax request required']);
 }

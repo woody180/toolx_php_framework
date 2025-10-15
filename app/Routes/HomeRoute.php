@@ -10,3 +10,8 @@ $router->get('snow-fall, like-snow, snowfall, snow, fall', function($req, $res) 
 });
 $router->get('page/gallery, page/gallery-page', 'HomeController@gallery');
 $router->get('page/(:segment)/(:num)', 'HomeController@about');
+
+// File manager
+$router->get('file-manager', function($req, $res) {
+    return $res->render('file-manager');
+});
