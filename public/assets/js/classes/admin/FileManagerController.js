@@ -950,6 +950,10 @@ export default class FileManagerController extends SketchEngine {
                         
                     });
 
+                },
+
+                init_instance_callback: (editor) => {
+                    document.querySelector('.tox-promotion-link').remove();
                 }
             });
         },
