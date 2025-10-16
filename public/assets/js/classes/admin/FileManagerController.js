@@ -27,6 +27,8 @@ export default class FileManagerController extends SketchEngine {
 
     variables = {
         baseurl: undefined,
+        tinymcePlugins: 'preview importcss searchreplace autolink autosave save directionality visualblocks visualchars fullscreen image link media codesample code table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons',
+        tinymceToolbar: 'undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist checklist | forecolor backcolor casechange permanentpen formatpainter removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media pageembed template link anchor codesample | a11ycheck ltr rtl | showcomments addcomment | code',
         filemanagerDirectory: undefined, // url
         
         selectedIndexes: [],
@@ -93,6 +95,7 @@ export default class FileManagerController extends SketchEngine {
 
         // Search
         this.lib('body').on('keydown', e => {
+            if (!document.querySelector(this.selectors.searchInput)) return;
             if (e.key === 'Enter' || e.keyCode === 13) {
                 e.preventDefault();
                 this.functions.search.call(this, e);
@@ -905,7 +908,7 @@ export default class FileManagerController extends SketchEngine {
 
             const dirPath = e.target.closest('button').getAttribute('data-path');
             const tinymceImageInput = document.querySelector('.tox-dialog__body input');
-            const imageLink = `${dirPath}/${image[0]}`;
+            const imageLink = image[0];
             tinymceImageInput.value = imageLink;
 
             UIkit.modal('#filemanager-modal').hide();
@@ -918,9 +921,9 @@ export default class FileManagerController extends SketchEngine {
         {
             tinymce.init({
                 selector: this.selectors.tinyArea,
-                plugins: 'preview importcss searchreplace autolink autosave save directionality visualblocks visualchars fullscreen image link media codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons',
-                toolbar: 'undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist checklist | forecolor backcolor casechange permanentpen formatpainter removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media pageembed template link anchor codesample | a11ycheck ltr rtl | showcomments addcomment',
-                
+                plugins: this.variables.tinymcePlugins,
+                toolbar: this.variables.tinymceToolbar,
+                height: 700,
                 
                 // image_advtab: true
                 file_picker_callback: (callback, value, meta) => {
@@ -954,6 +957,7 @@ export default class FileManagerController extends SketchEngine {
 
                 init_instance_callback: (editor) => {
                     document.querySelector('.tox-promotion-link').remove();
+                    document.querySelector('.tox-statusbar__branding').remove();
                 }
             });
         },
