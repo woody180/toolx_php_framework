@@ -611,11 +611,9 @@ THIS METHOD WILL WORK WITH ONE OR MULTIPLE FILES.
 
 
 # File Manager & TinyMCE Editor
-<video src="filemanager.webm" width="500px" controls></video>
 
 ### Router
 You can find router intended for file manager in **app/Routes/FilemanagerRoute.php**
-It takes AJAX calls.
 
 File manager requires **[getuikit front-end framework](https://getuikit.com)** which comes along with **app/Views/Partials/adminTemplate.php**.
 
