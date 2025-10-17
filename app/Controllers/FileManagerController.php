@@ -1,6 +1,5 @@
 <?php namespace App\Controllers;
 
-use \Gumlet\ImageResize;
 use  App\Engine\Libraries\Validation;
 
 class FileManagerController {

@@ -6,20 +6,24 @@
 composer create-project toolx/toolx-php-framework
 ```
 
-
 # Starting server
+
 With your terminal open application root directory and fire: 
+
 ```
 php cli serve
 ```
+
 Note that you must provide URLROOT from **app/Config/urls.php**
 
 Starting server in that manner is for development purposes only!
 
 # Router
+
 ## Creating routes
 
 Go to the app/Routes directory. Create route file and add two lines to it...
+
 ```
 <?php
 
@@ -38,7 +42,9 @@ $router->delete('/', function($req, $res) {});
 $router->all('/', function($req, $res) {});
 $router->match('get|post', '/', function($req, $res) {});
 ```
+
 It is also possible to add routes in the different way.
+
 ```
 $router->post([
     'route' => 'some/url',
@@ -49,8 +55,8 @@ $router->post([
 
 ```
 
-
 Router verb method takes two arguments -  ```$request``` and ```$response```.
+
 ```
 $router->get('/', function($req, $res) {
 
@@ -65,6 +71,7 @@ $router->get('/', 'HomeController@index');
 ```
 
 ## Bind multiple URLs to the same controller method or closure.
+
 ```
 $router->get('snow-fall, like-snow, snowfall, snow, fall', 'HomeController@index');
 ```
@@ -74,14 +81,15 @@ $router->get('snow-fall, like-snow, snowfall, snow, fall', 'HomeController@index
 ```
 $router->get('/', 'HomeController@index', ['Middlewares/auth']);
 ```
+
 It is possible to add multiple middlewares.
 
 ## Load routes from directories
 
 Sometimes, if you need to have too many routes, it is more comfortable to has them in additional directories. In order to load those additional directories you need to go to ```app/Config/routes.php``` file and load separate directories from there.
 
-
 ## Get url segments as callback arguments
+
 ```
 $router->get('books/orange-fox/part-one', function($req, $res, $x, $y, $z) {
 
@@ -89,25 +97,24 @@ $router->get('books/orange-fox/part-one', function($req, $res, $x, $y, $z) {
 });
 ```
 
-
 ## Create routes with CLI
+
 ```
 php cli make:routes optional/path/routerName
 ```
 
-
 ## Router placeholder
 
-| Placeholders      | Description |
-| ----------- | ----------- |
-|(:continue)|Continues url segments|
-|(:alpha)|Only alphabetical characters|
-|(:num)|Only numeric characters|
-|(:alphanum)|Only alphabetical and numeric characters|
-|(:segment)|Secured url characters such as dashes and low dashes, numbers and alphabetical characters|
-
+| Placeholders | Description                                                                               |
+| ------------ | ----------------------------------------------------------------------------------------- |
+| (:continue)  | Continues url segments                                                                    |
+| (:alpha)     | Only alphabetical characters                                                              |
+| (:num)       | Only numeric characters                                                                   |
+| (:alphanum)  | Only alphabetical and numeric characters                                                  |
+| (:segment)   | Secured url characters such as dashes and low dashes, numbers and alphabetical characters |
 
 ## Router configuration
+
 Configuration file can be found in ```app\Config\routes.php``` file
 Add route path without app\Routes directory
 
@@ -116,12 +123,12 @@ Add route path without app\Routes directory
 Rotues will be search in app\Routes\Back and app\Routes\Front - automatically.
 
 ## Users route
+
 There are pre-defined users route. To load this route file you need to go to the ```app/Config/routes.php``` file and load this routes directory from there.
 
 **UsersController.php** file is using php mailer for reseting password method and php resizer. Both of them are inside the **composer.json** file.
 
 User views file are also pre-defined inside the `app/Views/users` directory.
-
 
 # Controller
 
@@ -152,6 +159,7 @@ A model is a place to put validation and business logic.
 Create model with CLI
 
 With cli you must provide only model name and it will generate file inside the model called Model_Modelname.php. Check out the example below.
+
 ```
 php cli make:models modelname
 ```
@@ -169,7 +177,7 @@ To initialize model add function inside the controller or router function - **in
 use \R as R;
 
 class HomeController {
-    
+
     public function index($req, $res) {
 
         // Initialize model
@@ -235,17 +243,20 @@ To create migration, inside the model create method called **migrate()**
 
 This method can be invoked through **CLI**. To fire it, inside terminal type - **php cli make:migration modelName**
 
-
 # Method spoofing
+
 In some cases it is necessary use put, patch or some other request. In this case you can trait post request as some other.
 
 Check example
+
 ```
 <form action="" method="POST">
     <input name="_method" type="hidden" value="PUT" />
 </form>
 ```
+
 Or add function
+
 ```
 <form action="" method="POST">
     <?= setMethod("PUT") ?>
@@ -255,9 +266,11 @@ Or add function
 # CSRF Protection
 
 ## CSRF hidden field
+
 Turn CSRF protection on from - app/Config/app.php and set **CSRF_PROTECTION** to **TRUE**
 
 To add CSRF field to your form add following...
+
 ```
 <form method="post">
     <?= csrf_field(); ?>
@@ -265,11 +278,13 @@ To add CSRF field to your form add following...
 ```
 
 ## Check CSRF value / hash
+
 ```
 <?= csrf_hash() ?>
 ```
 
 # Form helpers
+
 Prevents losing form field values with **getForm('field_name')** function.
 
 ```
@@ -288,7 +303,7 @@ Before using **getForm** helper function, you must set if from controller or rou
 
 ```
 $router->post('users/register', function($req, $res) {
-    
+
     // Storing request body with setForm function
     setForm($req->body());
 
@@ -300,6 +315,7 @@ $router->post('users/register', function($req, $res) {
 # Request & Respons method
 
 You can find **\$request** and **\$response** variables in to the routes callback or inside the controller method callback as an arguments. Check out the example
+
 ```
 <?php namespace App\Controllers\Items;
 
@@ -309,7 +325,7 @@ use \R as R;
 
 class ItemsController {
     public function new($req, $res) {
-        
+
         // Request variable method
         return $res->redirectBack();
     }
@@ -318,31 +334,34 @@ class ItemsController {
 ```
 
 ## Avalable request methods
-### Request
-| Methods     | Description |
-| ----------- | ----------- |
-|$req->body()|Getting request body. Takes optional string argument.|
-|$req->getSegment(int 2)|Getting segment of the url|
-|$req->urlSegments()|Getting segments of the url as array|
-|$req->getMethod()|Request method|
-|$req->query(string $key)|Query param|
-|$req->queryStr()|Query parameters as string|
-|$req->files()|Getting file request|
-|$req->isAjax()|Check if request is ajax|
 
+### Request
+
+| Methods                  | Description                                           |
+| ------------------------ | ----------------------------------------------------- |
+| $req->body()             | Getting request body. Takes optional string argument. |
+| $req->getSegment(int 2)  | Getting segment of the url                            |
+| $req->urlSegments()      | Getting segments of the url as array                  |
+| $req->getMethod()        | Request method                                        |
+| $req->query(string $key) | Query param                                           |
+| $req->queryStr()         | Query parameters as string                            |
+| $req->files()            | Getting file request                                  |
+| $req->isAjax()           | Check if request is ajax                              |
 
 ## Avalable response methods
-### Response
-| Methods      | Description |
-| ----------- | ----------- |
-|$res->redirect(string $url)|Redirect someware|
-|$res->redirectBack()|Getting segment of the url|
-|$res->render(string $pathToView)|Rendering view|
-|$res->status(int $response_code)|Setting status code|
-|$res->send(array $data)|Sends back json data|
 
+### Response
+
+| Methods                          | Description                |
+| -------------------------------- | -------------------------- |
+| $res->redirect(string $url)      | Redirect someware          |
+| $res->redirectBack()             | Getting segment of the url |
+| $res->render(string $pathToView) | Rendering view             |
+| $res->status(int $response_code) | Setting status code        |
+| $res->send(array $data)          | Sends back json data       |
 
 # URL helpers
+
 ## Get base url
 
 To get progect base url, use - **baseUrl()** function. It takes optional parametes where you can add new url based on base url. See example
@@ -353,21 +372,26 @@ To get progect base url, use - **baseUrl()** function. It takes optional paramet
 ```
 
 ## URL segments
+
 To get url without site base url with function **urlSegments()**. It takes optional parametes where you can set url indexes. 
 
 For example you current url is **http://sitename.com/users/login**:
+
 ```
 <?= urlSegments() ?>    <!-- returns - users/login -->
 <?= urlSegments(2) ?>   <!-- returns - login -->
 <?= urlSegments('first') ?>   <!-- returns - first part of url -->
 <?= urlSegments('last') ?>   <!-- returns - last part of url -->
 ```
+
 ## Getting query string
+
 ```
 <?= query() // Takes optional numeric argument ?>
 ```
 
 ## Creating direct link from Controller and its method.
+
 There is a hendy function called **url_to** which allows you to create direct links to the controllers methods.
 
 ```
@@ -375,8 +399,8 @@ There is a hendy function called **url_to** which allows you to create direct li
 <a href="<?= url_to('HomeController@index') ?>">Go to home page</a> // Result is: http://localhost/home
 <a href="<?= url_to('HomeController@about') ?>">Go to about page</a> // Result is: http://localhost/about
 ```
-One thing to consider while using this (url_to) function is that you must bind controller and method to the route ``` $router->get('/', 'HomeController@index'); ```. This (url_to) function **won't work with closures** ``` $router->get('/', function($req, $res) {}); ```
 
+One thing to consider while using this (url_to) function is that you must bind controller and method to the route ``` $router->get('/', 'HomeController@index'); ```. This (url_to) function **won't work with closures** ``` $router->get('/', function($req, $res) {}); ```
 
 # Middlewares
 
@@ -386,6 +410,7 @@ Middleware Files have to be inside the ```app/Routes``` directory. It is a third
 $router->get('url', 'callback or Controller@method', 'middleware')
 $router->get('url', 'callback or Controller@method', 'middleware/dir1/dir2/fileFuncName')
 ```
+
 Middleware has to be declared as string and provide path to the middleware file without .php extension at the end.
 
 Middleware file name must be the same as function name inside!
@@ -393,17 +418,21 @@ Middleware file name must be the same as function name inside!
 Middleware function receives two arguments inside as ```$request``` and ```$response```. They are the same arguments as inside the ```$router``` verb method (get, post..)
 
 # Custom helper files
+
 Helper files are located inside **app/Helpers** directory and all your custom helpers must located there.
 
 To load custom helpers there are two ways - loading them globally and for individual route.
 
-## Loading helper globally 
+## Loading helper globally
+
 Go to the **app/Config/helpers.php** Directory and add helper file names in to the array, without extention names (.php)
+
 ```
 CONST CUSTOM_HELPERS = ['myCustomHelperOne', 'myCustomHelperTwo'];
 ```
 
 ## Loading helper locally
+
 Add custom helper inside the route file using **library()** function. Take a look at the example below.
 
 ```
@@ -416,7 +445,7 @@ $router->get('/', function($req, $res) {
 
     // Loading custom helpers
     helpers(['myCustomHelperOne', 'myCustomHelperTwo']);
-    
+
     $res->render('welcome', [
         'title' => 'APP Title',
         'description' => 'This is the APP description'
@@ -429,6 +458,7 @@ $router->get('/', function($req, $res) {
 To load libraries go to app/Config/libraries.php file and uncomment library you want to load.
 
 ## Image resize library
+
 As an image resize library we use - https://github.com/gumlet/php-image-resize
 
 ```
@@ -477,6 +507,7 @@ $router->post('api/one', function($req, $res) {
 ```
 
 ## Available validators
+
 - alpha // Only alphabetical characters (without anything else)
 - alpha_spaces // Only alphabetical characters & spaces
 - alpha_num_spaces // Only alphabetical, numeric & spaces
@@ -496,6 +527,7 @@ $router->post('api/one', function($req, $res) {
 - phone // Validation phone number
 
 ## Field error message
+
 ```
 <form>
     <div>
@@ -505,59 +537,135 @@ $router->post('api/one', function($req, $res) {
 </form>
 ```
 
-# Files.
+# Files & Upload files.
 
 ### Show files
-```
-public function method($req, $res) {
 
-    // Show file/s
-    $files = $req->files('input-name')->show(string $key);
-});
+```
+$files = $req->files('input-name')->show(string $key);
+$key can be:
+- name
+- type
+- tmp_name
+- error
+- size
+
 ```
 
-### Upload files
-```
-public function method($req, $res) {
+### Upload file(s) example
 
-    // Upload file/s
-    $file = $req->files('input-name')->upload(string $filePath, string $fileName = null);
-});
+A simple example can be uploading images using a form.
+For example you have a file input field with name of 'images'
+
 ```
+<form action="upload-files-url" method="POST" enctype="multipart/form-data">
+
+    // Generate CSRF inpit
+    <?= csrf_field() ?>
+    
+    <input type="file" name="images" multiple>
+
+    <button type="submit">Upload files</button>
+</form>
+```
+
+
+Upload method
+```
+public function fileUpload($req, $res) {
+
+    // Validation
+    $validation = new App\Engine\Libraries\Validation();
+
+    // Getting errors
+    $errors = $validation
+            ->with(['images' => $req->files('images')->show()])
+            ->rules([
+                'images' => $this->configurations['validationRules']['images'],
+            ])
+            ->validate();
+
+        if (!empty($errors)) {
+           setFlashData('error', $errors);
+           return $res->reirectBack();
+        }
+
+        // Upload files
+        $uploadDir = dirname(APPROOT) . "/public/assets/images";
+        try {
+            $uploadedFiles = $req->files('images')->upload($uploadDir);
+        } catch (\Exception $ex) {
+            setFlashData('error', $ex);
+            return $res->redirectBack();
+        }
+
+        setFlashData('success', 'Files has been uploaded successfully.');
+        return $res->redirectBack();
+}
+```
+
+THIS METHOD WILL WORK WITH ONE OR MULTIPLE FILES.
+
+
+
+
+
+# File Manager & TinyMCE Editor
+<video src="/assets/images/files/filemanager.webm" width="500px" controls></video>
+
+### Router
+You can find router intended for file manager in **app/Routes/FilemanagerRoute.php**
+It takes AJAX calls.
+
+File manager requires **<a href="https://getuikit.com" target="_blank">getuikit front-end framework</a>** which comes along with **app/Views/Partials/adminTemplate.php**
+
+### TinyMCE Editor
+TinyMCE Editor is embeded with **app/Views/Partials/adminTemplate.php**. You can use this template as a blueprint for your admin views.
+
+TinyMCE Editor comes along with **File manager**
+
+
+
 
 # Languages and Translations
 
 For multilangual activation go to **app/Config/app.php** directory and set **MULTILINGUAL** to **true**
 
-## Creating language list with CLI 
+## Creating language list with CLI
 
 ### Creating languages list
+
 ```
 php cli language:set english en --primary
 php cli language:set georgian ge
 ```
 
 ### Set primary language
+
 ```
 php cli language:primary ge
 ```
 
 ### Get language list
+
 ```
 php cli language:list show
 ```
 
 ### Delete language
+
 ```
 php cli language:delete en
 ```
 
 ### Delete list
+
 ```
 php cli language:refresh all
 ```
 
 ## Creating translation files
+
 Inside **app/languages** directory create folder with language code for example 'en'.
 
 Than create .php file called for example **validation** and inside this file return array with key / values of words / sentences you want to translate.
@@ -572,6 +680,7 @@ return [
 In order to show this translations use namespace `use App\Engine\Libraries\Languages;`
 
 and than - 
+
 ```
 <?php
 
@@ -581,6 +690,7 @@ Languages::translate('validation.err_name')
 ```
 
 ## Inline translation
+
 You can also translation within **html / view** file.
 
 > **_NOTE:_**  Lanugage codes provided inside array as keys must be created within **Engine** via **CLI**. Look at documentation above.
@@ -591,7 +701,6 @@ You can also translation within **html / view** file.
     'de' => 'Englische Sprache'
 ]);
 ```
-
 
 ## Language switcher route
 
@@ -612,20 +721,22 @@ $router->get('language/switch/(:alpha)', function($req, $res)
     array_shift($prevUrl);
     array_unshift($prevUrl, $languageCode);
     $newurl = join('/',$prevUrl);
-    
+
     if ($req->isAjax()) return $res->send(['url' => URLROOT . "/{$newurl}"]);
-    
+
     return $res->redirect(URLROOT . "/{$newurl}");
 });
 
 ```
 
-
 # Singleton pattern
+
 Create Singleton pattern with CLI
+
 ```
 php cli make:singleton className
 ```
+
 It will generate file in **app/Singleton** directory. This file goning to load automatically form **app/Engine/bootstrap.php** file.
 
 To use this class, just load coresponding namespace
@@ -639,7 +750,6 @@ public function contorllerName() {
 }
 
 ```
-
 
 # Pagination
 
@@ -656,7 +766,6 @@ $pagingData = pager([
 ]); 
 $pages = R::find("pages", "order by timestamp asc limit $limit offset $offset");
 ```
-
 
 # Helper functions
 
@@ -682,7 +791,6 @@ $pages = R::find("pages", "order by timestamp asc limit $limit offset $offset");
 - getUserIP();
 - get_time_ago($timestamp); // Takes timestamp as argument and returns 'time ago'
 
-
 # CLI
 
 It is possible to create routes and controllers using CLI commands
@@ -693,3 +801,5 @@ It is possible to create routes and controllers using CLI commands
 - Migration through model method - ```php cli make:migration ModelName```
 - Create restful routes and controllers - ``` php cli make:restful Blog/Articles ```
 - Create singleton - ``` php cli make:singleton className ```
+
+
