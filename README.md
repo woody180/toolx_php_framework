@@ -623,6 +623,8 @@ File manager requires **<a href="https://getuikit.com" target="_blank">getuikit 
 TinyMCE Editor is embeded with **app/Views/Partials/adminTemplate.php**. You can use this template as a blueprint for your admin views.
 
 TinyMCE Editor comes along with **File manager**
+![Open file manager](/assets/images/system_images/open_file_manager.jpg)
+
 
 
 
