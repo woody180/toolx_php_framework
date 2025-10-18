@@ -653,7 +653,12 @@ TinyMCE Editor comes along with **File manager**
 
 - Insert files in to the TinyMCE editor
 
-<img src="file:///C:/Users/woody/OneDrive/Pictures/Typedown/3a28b7b9-c919-4a81-8197-e3c542c640ff.png" title="" alt="3a28b7b9-c919-4a81-8197-e3c542c640ff" data-align="center">
+**Available extensions by default:**
+jpg, jpeg, png, gif, bmp, webp, zip, pdf, mp4, webm, mp3
+
+**Available extensions can be configured inside** ```app\Controllers\FileManagerController.php```
+
+![File manager](file_manager.jpg)
 
 # Languages and Translations
 
