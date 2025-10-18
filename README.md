@@ -562,15 +562,15 @@ For example you have a file input field with name of 'images'
 
     // Generate CSRF inpit
     <?= csrf_field() ?>
-    
+
     <input type="file" name="images" multiple>
 
     <button type="submit">Upload files</button>
 </form>
 ```
 
-
 Upload method
+
 ```
 public function fileUpload($req, $res) {
 
@@ -613,19 +613,47 @@ THIS METHOD WILL WORK WITH ONE OR MULTIPLE FILES.
 # File Manager & TinyMCE Editor
 
 ### Router
+
 You can find router intended for file manager in **app/Routes/FilemanagerRoute.php**
 
 File manager requires **[getuikit front-end framework](https://getuikit.com)** which comes along with **app/Views/Partials/adminTemplate.php**.
 
 ### TinyMCE Editor
+
 TinyMCE Editor is embeded with **app/Views/Partials/adminTemplate.php**. You can use this template as a blueprint for your admin views.
 
 TinyMCE Editor comes along with **File manager**
 ![Open file manager](open_file_manager.jpg)
 
+### File manager controller
 
+**Path**: ```app\Controllers\FileManagerController.php``` Available configurations inside FileManagerController constructor.
 
+**Rendered view**: ```app\Views\filemanager\filemanager.php```
 
+**JavaScript**: ```public\js\classes\admin\FileManagerController.js```
+
+**Style SCSS**: ```public\scss\_filemanager.scss```
+
+### File manager features:
+
+- Create folders
+
+- Rename files
+
+- Upload / Delete
+
+- Download
+
+- Archive / Unarchive
+
+- Preview Images, videos & mp3 files
+
+- Select / Diselect all items
+
+- Insert files in to the TinyMCE editor
+
+<img src="file:///C:/Users/woody/OneDrive/Pictures/Typedown/3a28b7b9-c919-4a81-8197-e3c542c640ff.png" title="" alt="3a28b7b9-c919-4a81-8197-e3c542c640ff" data-align="center">
 
 # Languages and Translations
 
@@ -801,5 +829,3 @@ It is possible to create routes and controllers using CLI commands
 - Migration through model method - ```php cli make:migration ModelName```
 - Create restful routes and controllers - ``` php cli make:restful Blog/Articles ```
 - Create singleton - ``` php cli make:singleton className ```
-
-
