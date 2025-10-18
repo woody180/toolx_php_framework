@@ -181,3 +181,11 @@ function html2text($html) {
     return $converted;
 }
 
+
+
+function loadUIKit() {
+    return '<link rel="stylesheet" href="'.assetsUrl('css/uikit.min.css').'">
+            <link rel="stylesheet" href="'.assetsUrl('css/main.min.css').'">
+            <script src="'.assetsUrl('js/uikit.min.js').'"></script>
+            <script src="'.assetsUrl('js/uikit-icons.min.js').'"></script>';
+}
