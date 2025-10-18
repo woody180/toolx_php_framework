@@ -658,6 +658,11 @@ jpg, jpeg, png, gif, bmp, webp, zip, pdf, mp4, webm, mp3
 
 **Available extensions can be configured inside** ```app\Controllers\FileManagerController.php```
 
+**Globally available JavaScript function for invoke file manager:** ```window.renderFileManager()```
+
+>**Note** that before filemanager invokation you must load GETUIKIT framework. You can do it with ```loadUIKit()``` function inside the head of your template. This function will load all necessary CSS and JS files. <br>
+Also you must load ```<script type="module" src="<?= assetsUrl('js/adminBootstrap.js') ?>"></script>``` at the end of your template.
+
 ![File manager](file_manager.jpg)
 
 # Languages and Translations
