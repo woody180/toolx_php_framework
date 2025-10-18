@@ -44,7 +44,7 @@ export default class FileManagerController extends SketchEngine {
 
 
     execute = [
-        'tinymceInit',
+        'tinymceInit', 'executeGlobal'
     ];
 
 
@@ -450,6 +450,40 @@ export default class FileManagerController extends SketchEngine {
 
 
     functions = {
+
+
+        // Global file manager executer
+        executeGlobal() {
+            const renderFileManager = () => {
+                document.body.insertAdjacentHTML('beforeend', `<div id="dom-loader-animation">
+                    <div class="spinner"></div>
+                </div>`);
+
+                // if (!this.variables.filemanagerDirectory) this.variables.filemanagerDirectory = this.variables.baseurl + '/filemanager';
+
+                // callback(imgLink, { title: imageName, alt: imageName }); // Working with tinymce callback
+
+                // Opening file manager
+                this.functions.renderFileManager.call(this, `${this.variables.baseurl}/filemanager`, (html) => {
+
+                    document.getElementById('dom-loader-animation').remove();
+                    
+                    const dialog = UIkit.modal.dialog(html);
+                    const modalElement = dialog.$el;
+                    modalElement.id = 'filemanager-modal';
+                    
+                    this.functions.applyFullscreenState.call(this);
+
+                    modalElement.classList.add('uk-modal-container');
+                    modalElement.querySelector('.uk-modal-dialog').className = 'uk-modal-container uk-modal-dialog uk-modal-body uk-margin-auto-vertical uk-border-rounded';
+                    // modalElement.querySelector('.uk-modal-dialog').insertAdjacentHTML('afterbegin', `<button class="uk-modal-close-default" type="button" uk-close></button>`);
+                    
+                });
+            };
+
+            window.renderFileManager = renderFileManager;
+        },
+
 
 
         clearSearch() {
@@ -919,6 +953,7 @@ export default class FileManagerController extends SketchEngine {
 
         tinymceInit()
         {
+            if (typeof tinymce == 'undefined') return false;
             tinymce.init({
                 selector: this.selectors.tinyArea,
                 plugins: this.variables.tinymcePlugins,
