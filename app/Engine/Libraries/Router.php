@@ -252,7 +252,7 @@ class Router {
                     $checkNamespace = $this->getNamespaceByFileContent($src);
 
                     // Check if namespace is inside the controller
-                    if (!$checkNamespace) die('Controller must has a namespace');
+                    if (!$checkNamespace) die('The controller must have a namespace.');
 
                     // Get controller namespace
                     $namespace = $checkNamespace . '\\' . $this->currentController;
