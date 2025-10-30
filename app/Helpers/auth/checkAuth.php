@@ -2,6 +2,8 @@
 
 function checkAuth(array $privilegies = []) {
 
+    if (!DATABASE) return false;
+
     $id = isset($_SESSION['userid']) ? $_SESSION['userid'] : null;
     $user = null;
 
