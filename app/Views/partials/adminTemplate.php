@@ -29,5 +29,7 @@
     <?= $this->section('script') ?>
 
     <script type="module" src="<?= assetsUrl('js/adminBootstrap.js') ?>"></script>
+
+    <?= $this->insert('loadDevTools') ?>
 </body>
 </html>
