@@ -10,6 +10,7 @@ class Router {
     private $currentController;
     private $currentMethod;
     private $viewPath;
+    private $trackinfo = [];
 
     
     private function __construct() {
@@ -17,7 +18,7 @@ class Router {
     }
     
     
-    private function parseArgs(string $method, $arg, $callback, $middleware = null)
+    private function parseArgs(string $method, $arg, $callback, $backtrace, $middleware = null)
     {
         if (is_array($arg)) {
             $cntrlr = $arg['controller'];
@@ -25,9 +26,9 @@ class Router {
             $md     = $arg['middleware'] ?? '';
             
             $contollerWithMethld = ucfirst($cntrlr) . '@' . $mtd; // Bind contorller with method like this - 'Controller@method'
-            $this->routes[$method][$arg['route']] = [$contollerWithMethld, $md, 'csrf' => $arg['csrf'] ?? CSRF_PROTECTION]; // Uppend to the routes array
+            $this->routes[$method][$arg['route']] = [$contollerWithMethld, $md, $backtrace, 'csrf' => $arg['csrf'] ?? CSRF_PROTECTION]; // Uppend to the routes array
         } else {
-            $this->routes[$method][$arg] = [$callback, $middleware, 'csrf' => $arg['csrf'] ?? CSRF_PROTECTION];
+            $this->routes[$method][$arg] = [$callback, $middleware, $backtrace, 'csrf' => $arg['csrf'] ?? CSRF_PROTECTION];
         }
     }
 
@@ -38,39 +39,146 @@ class Router {
     }
 
 
-
-
     // Router HTTP verbs
     public function get($url, $callback = null, $middleware = null) {
-        $this->parseArgs('get', $url, $callback, $middleware);
+
+        $trackInformation = [];
+        if (!$this->request->isAjax() && ENV === 'development') 
+        {
+            $backtrace = debug_backtrace();
+            $caller = array_shift($backtrace);
+            $file = $caller['file'];
+
+            
+            $trackInformation = [
+                'method' => 'GET',
+                'url' => $url,
+                'defined_in' => $file,
+                'middlewares' => is_string($middleware) ? $middleware : toJSON($middleware)
+            ];
+        }
+
+        $this->parseArgs('get', $url, $callback, ['track_info' => $trackInformation], $middleware);
+
     }
     public function post($url, $callback = null, $middleware = null) {
-        $this->parseArgs('post', $url, $callback, $middleware);
+        $trackInformation = [];
+        if (!$this->request->isAjax() && ENV === 'development') 
+        {
+            $backtrace = debug_backtrace();
+            $caller = array_shift($backtrace);
+            $file = $caller['file'];
+
+            $trackInformation = [
+                'method' => 'POST',
+                'url' => $url,
+                'defined_in' => $file,
+                'middlewares' => is_string($middleware) ? $middleware : toJSON($middleware)
+            ];
+        }
+
+        $this->parseArgs('post', $url, $callback, ['track_info' => $trackInformation], $middleware);
+
     }
     public function put($url, $callback = null, $middleware = null) {
-        $this->parseArgs('put', $url, $callback, $middleware);
+
+        $trackInformation = [];
+        if (!$this->request->isAjax() && ENV === 'development') 
+        {
+            $backtrace = debug_backtrace();
+            $caller = array_shift($backtrace);
+            $file = $caller['file'];
+
+            $trackInformation = [
+                'method' => 'PUT',
+                'url' => $url,
+                'defined_in' => $file,
+                'middlewares' => is_string($middleware) ? $middleware : toJSON($middleware)
+            ];
+        }
+
+        $this->parseArgs('put', $url, $callback, ['track_info' => $trackInformation], $middleware);
     }
     public function patch($url, $callback = null, $middleware = null) {
-        $this->parseArgs('patch', $url, $callback, $middleware);
+
+        $trackInformation = [];
+        if (!$this->request->isAjax() && ENV === 'development') 
+        {
+            $backtrace = debug_backtrace();
+            $caller = array_shift($backtrace);
+            $file = $caller['file'];
+
+            $trackInformation = [
+                'method' => 'PATCH',
+                'url' => $url,
+                'defined_in' => $file,
+                'middlewares' => is_string($middleware) ? $middleware : toJSON($middleware)
+            ];
+        }
+
+        $this->parseArgs('patch', $url, $callback, ['track_info' => $trackInformation], $middleware);
     }
     public function delete($url, $callback = null, $middleware = null) {
-        $this->parseArgs('delete', $url, $callback, $middleware);
+        
+        $trackInformation = [];
+        if (!$this->request->isAjax() && ENV === 'development') 
+        {
+            $backtrace = debug_backtrace();
+            $caller = array_shift($backtrace);
+            $file = $caller['file'];
+
+            $trackInformation = [
+                'method' => 'DELETE',
+                'url' => $url,
+                'defined_in' => $file,
+                'middlewares' => is_string($middleware) ? $middleware : toJSON($middleware)
+            ];
+        }
+
+        $this->parseArgs('delete', $url, $callback, ['track_info' => $trackInformation], $middleware);
     }
     public function match($methods, $url, $callback, $middleware = null) {
 
+        $trackInformation = [];
+        if (!$this->request->isAjax() && ENV === 'development') 
+        {
+            $backtrace = debug_backtrace();
+            $caller = array_shift($backtrace);
+            $file = $caller['file'];
+
+            $trackInformation = [
+                'method' => strtoupper($methods),
+                'url' => $url,
+                'defined_in' => $file,
+                'middlewares' => is_string($middleware) ? $middleware : toJSON($middleware)
+            ];
+        }
+
         $methodsArray = explode('|', $methods);
 
-        foreach ($methodsArray as $method)
-            $this->routes[$method][$url] = [$callback, $middleware];
+        foreach ($methodsArray as $method) $this->routes[$method][$url] = [$callback, $middleware, ['track_info' => $trackInformation]];
     }
     public function all($url, $callback, $middleware = null) {
 
         $httpVerbs = ['get', 'post', 'put', 'patch', 'delete', 'options'];
 
-        foreach ($httpVerbs as $verb)
-            $this->routes[$verb][$url] = [$callback, $middleware];
-    }
-    
+        $trackInformation = [];
+        if (!$this->request->isAjax() && ENV === 'development') 
+        {
+            $backtrace = debug_backtrace();
+            $caller = array_shift($backtrace);
+            $file = $caller['file'];
+
+            $trackInformation = [
+                'method' => 'ALL HTTP VERBS',
+                'url' => $url,
+                'defined_in' => $file,
+                'middlewares' => is_string($middleware) ? $middleware : toJSON($middleware)
+            ];
+        }
+
+        foreach ($httpVerbs as $verb) $this->routes[$verb][$url] = [$callback, $middleware, ['track_info' => $trackInformation]];
+    }    
     
         
     // Placeholder to regex
@@ -120,7 +228,9 @@ class Router {
                 if (isset($match[0]) && $match[0] === $compareTo) {
                     
                     if (isset($method['csrf']) && $method['csrf']) $this->checkCSRF();
-                    
+
+                    if (!$this->request->isAjax() && ENV === 'development') $this->trackinfo = $method[2]['track_info'] ?? [];
+
                     return $method;
                 } else {
                     continue;
@@ -228,6 +338,13 @@ class Router {
                     // Check if route has some middleware
                     if ($callback[1]) $this->runMiddleware($callback[1]);
 
+                    if (!$this->request->isAjax() && ENV === 'development') {
+                        $this->trackinfo['caller'] = 'closure';
+                        $this->trackinfo['all_routes'] = array_keys($this->routes['get']);
+                        file_put_contents(dirname(APPROOT) . '/log.txt', toJSON($this->trackinfo) . "\n");
+                    }
+
+
                     call_user_func_array($callback[0], $urlSegmentsWtihReqResTrait);
 
                 } else {
@@ -238,9 +355,14 @@ class Router {
                     // Get controller
                     $this->currentController = $controllerMethodArray[0];
 
+                    if (!$this->request->isAjax() && ENV === 'development') {
+                        $this->trackinfo['caller'] = $callback[0];
+                        $this->trackinfo['all_routes'] = array_keys($this->routes['get']);
+                        file_put_contents(dirname(APPROOT) . '/log.txt', toJSON($this->trackinfo) . "\n");
+                    }
+
                     // Check if controller file exists
-                    if (!file_exists(APPROOT . "/Controllers/{$this->currentController}.php"))
-                        abort();
+                    if (!file_exists(APPROOT . "/Controllers/{$this->currentController}.php")) abort();
 
                     // Require controller file
                     require_once APPROOT . "/Controllers/{$this->currentController}.php"; // Include file
