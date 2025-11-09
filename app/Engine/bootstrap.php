@@ -19,6 +19,8 @@ else
     ini_set('display_errors', 0);
 
 
+if (ENV !== 'development' && file_exists(dirname(APPROOT) . '/log.txt')) unlink(dirname(APPROOT) . '/log.txt');
+
 // Base helper files
 require_once APPROOT . "/Engine/Helpers/engineToolHelpers.php";
 require_once APPROOT . "/Engine/Helpers/engineHelpers.php";
@@ -43,7 +45,8 @@ if (!empty(CUSTOM_HELPERS)) {
 
 
 // RedBeanPHP model initialization function
-if (DATABASE) require_once APPROOT . "/Engine/Database/Initialization.php";
+require_once APPROOT . "/Engine/Database/Initialization.php";
+
 
 
 // Load files on application boot
