@@ -10,6 +10,7 @@ class FileManagerController {
 
     public function __construct() {
         $this->configurations = [
+            'checkCacheDir' => TRUE, // Or FALSE
             'viewPath' => 'filemanager/filemanager',
             'fileDirectoryName' => 'images/files',
             'extensions' => ['application/zip', 'application/octet-stream', 'multipart/x-zip', 'application/zip-compressed', 'application/x-zip-compressed', 'application/x-zip', 'image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/bmp', 'audio/mp3', 'audio/mpeg', 'video/mp4', 'application/mp4', 'video/webm', 'audio/webm', 'application/pdf'],
@@ -181,6 +182,15 @@ class FileManagerController {
                     if (in_array(strtolower($fileinfo->getExtension()), $this->configurations['imageExtensions'])) 
                     {
                         $cachedPath = explode($fileinfo->getFilename(), $imageFilePath)[0] . '.cache/' . $fileinfo->getFilename();
+
+                        // Check if image not exists in cache directory
+                        // If image not exists in cache directory, we going to create it
+                        if ($this->configurations['checkCacheDir']) {
+                            if (!file_exists(dirname(APPROOT) . '/public/' . $cachedPath))  {
+                                $this->cacheImages(dirname(APPROOT) . '/public/' . $imageFilePath, dirname(APPROOT) . '/public/' . $cachedPath);
+                            }
+                        }
+
 
                         $items[] = [
                             'type' => 'file',
