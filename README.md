@@ -688,8 +688,6 @@ window.renderFileManager({
 });
 ```
 
-On insert event data also can be found inside ``` this.pubsub.subscribe('filemanagerData', (data) => { ... }) ```
-
 Or if you are using SketchEngine extended class with JavaScript you can subscribe to 'filemanagerData' like this ``` this.pubsub.subscribe('filemanagerData', (data) => { ... }) ```  
 
 # Languages and Translations
