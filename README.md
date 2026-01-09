@@ -665,6 +665,33 @@ Also you must load ```<script type="module" src="<?= assetsUrl('js/adminBootstra
 
 ![File manager](file_manager.jpg)
 
+## Getting files callback
+
+Getting files with JavaScript
+
+```
+new FileManagerController({
+    baseurl: baseurl,
+    editorClass: '.tiny-text-area',
+    onInsert: (data) => {
+        document.querySelector('.tox-dialog__body input').value = data.files[0];
+    }
+});
+```
+
+In the case below, you must have the 'onInsert' event inside the 'FileManagerController' initialization to use it inside the 'window.renderFileManager' function.
+```
+window.renderFileManager({
+    onInsert: (data) => {
+        console.log(data);  
+    }
+});
+```
+
+On insert event data also can be found inside ``` this.pubsub.subscribe('filemanagerData', (data) => { ... }) ```
+
+Or if you are using SketchEngine extended class with JavaScript you can subscribe to 'filemanagerData' like this ``` this.pubsub.subscribe('filemanagerData', (data) => { ... }) ```  
+
 # Languages and Translations
 
 For multilangual activation go to **app/Config/app.php** directory and set **MULTILINGUAL** to **true**

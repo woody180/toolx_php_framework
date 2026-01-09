@@ -1,12 +1,14 @@
 import SketchEngine from '../../SketchEngine.js';
 
 export default class FileManagerController extends SketchEngine {
-    constructor(baseurl) {
+    constructor(obj) {
         super();
-        this.variables.baseurl = baseurl;
+        this.variables.baseurl  = obj.baseurl;
+        this.selectors.tinyArea = obj.editorClass;
+        this.functions.onInsert = obj.hasOwnProperty('onInsert') ? obj.onInsert : null;
 
 
-        fetch(`${baseurl}/filemanager/get-server-info`, {
+        fetch(`${obj.baseurl}/filemanager/get-server-info`, {
             method: 'GET',
             headers: {
                 "X-Requested-With": "XMLHttpRequest"
@@ -49,7 +51,7 @@ export default class FileManagerController extends SketchEngine {
 
 
     selectors = {
-        tinyArea: '.tiny-text-area',
+        tinyArea: undefined,
         compressSelecetedButton: '#fl-compress-selected',
         flModal: '#filemanager-modal',
         renameItemButton: '#fl-rename-item',
@@ -81,7 +83,7 @@ export default class FileManagerController extends SketchEngine {
         // Search all checkbox
         this.lib('body').on('change', e => {
             e.target.checked ? this.variables.searchAll = true : this.variables.searchAll = false;
-            console.log(this.variables.searchAll);
+            // console.log(this.variables.searchAll);
             
         }, this.selectors.searchAllCheckbox);
 
@@ -171,7 +173,7 @@ export default class FileManagerController extends SketchEngine {
             const files = e.target.files;
             const csrfToken = document.querySelector('[name="csrf_token"]').value;
 
-            console.log(this.variables.maxFileUpload);
+            // console.log(this.variables.maxFileUpload);
             
             
             // Error message for maximum file upload
@@ -229,7 +231,7 @@ export default class FileManagerController extends SketchEngine {
 
             e.stopPropagation();
             
-            console.log(files);
+            // console.log(files);
         }, '#fl-upload-files');
 
 
@@ -347,7 +349,7 @@ export default class FileManagerController extends SketchEngine {
         this.lib('body').on('click', e => {
 
             e.preventDefault();
-            console.log(this.variables.compressionAction);
+            // console.log(this.variables.compressionAction);
 
             // Zip / compress selected items
             this.functions.filesCompression.call(this);
@@ -454,14 +456,10 @@ export default class FileManagerController extends SketchEngine {
 
         // Global file manager executer
         executeGlobal() {
-            const renderFileManager = () => {
+            const renderFileManager = (args) => {
                 document.body.insertAdjacentHTML('beforeend', `<div id="dom-loader-animation">
                     <div class="spinner"></div>
                 </div>`);
-
-                // if (!this.variables.filemanagerDirectory) this.variables.filemanagerDirectory = this.variables.baseurl + '/filemanager';
-
-                // callback(imgLink, { title: imageName, alt: imageName }); // Working with tinymce callback
 
                 // Opening file manager
                 this.functions.renderFileManager.call(this, `${this.variables.baseurl}/filemanager`, (html) => {
@@ -715,7 +713,7 @@ export default class FileManagerController extends SketchEngine {
             .then(data => {
                 document.querySelector('#loading-animation').classList.add('uk-hidden');
                 document.querySelector('#fl-loading-progress').innerText = '';
-                console.log(data);
+                // console.log(data);
                 
                 if (data.success) {
                     UIkit.notification(`<p class="uk-margin-remove uk-text-small">${data.success}</p>`, {pos: 'bottom-center'});
@@ -811,7 +809,7 @@ export default class FileManagerController extends SketchEngine {
         renderFileManager(url, callback) {
 
             this.variables.filemanagerDirectory = url;
-            console.log(this.variables.filemanagerDirectory);
+            // console.log(this.variables.filemanagerDirectory);
             
             fetch(url, {
                 method: 'GET',
@@ -918,8 +916,8 @@ export default class FileManagerController extends SketchEngine {
                 this.variables.selectedType = undefined;
             }
 
-            console.log(this.variables.compressionAction);
-            console.log(this.variables.selectedType);
+            // console.log(this.variables.compressionAction);
+            // console.log(this.variables.selectedType);
             
         },
         
@@ -941,11 +939,20 @@ export default class FileManagerController extends SketchEngine {
             if (!image.length) return alert('Select image first');
 
             const dirPath = e.target.closest('button').getAttribute('data-path');
-            const tinymceImageInput = document.querySelector('.tox-dialog__body input');
-            const imageLink = image[0];
-            tinymceImageInput.value = imageLink;
+            this.pubsub.publish('filemanagerData', {image: image, dirPath});
 
+            if (this.functions.onInsert) {
+                this.functions.onInsert({files: image, dirPath});
+            }
+            
+            // const tinymceImageInput = document.querySelector('.tox-dialog__body input');
+            // const imageLink = image[0];
+            
+            
+            // tinymceImageInput.value = imageLink;
+            
             UIkit.modal('#filemanager-modal').hide();
+            
 
             // callback({files: this.variables.selectedIndexes, dirPath});
         },
