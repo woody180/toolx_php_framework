@@ -41,7 +41,6 @@ export default class FileManagerController extends SketchEngine {
         compressionAction: 'zip', // zip or unzip
         isFullscreen: localStorage.getItem('toolx_fl_fullscreen') === 'true' ? true : false,
         selectedType: undefined, // Can be mixed, file, folder. Mixed means both files and folders or multile files
-        searchInput: '#fl-manager-items-search',
         closeSvg: '<svg width="25" height="25" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="Menu / Close_SM"><path id="Vector" d="M16 16L12 12M12 12L8 8M12 12L16 8M12 12L8 16" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g></svg>',
         searchCloseOriginalIcon: '<svg width="20" height="20" viewBox="0 0 20 20"><circle fill="none" stroke="#000" stroke-width="1.1" cx="9" cy="9" r="7"></circle><path fill="none" stroke="#000" stroke-width="1.1" d="M14,14 L18,18 L14,14 Z"></path></svg>',
         searchAll: false
@@ -67,7 +66,8 @@ export default class FileManagerController extends SketchEngine {
         searchIcon: '#fl-clear-search-icon',
         searchAllCheckbox: '#fl-search-all',
         clearSearchButton: '#fl-clear-search-icon',
-        gridContainer: '#fl-modal-data #filemanager'
+        gridContainer: '#fl-modal-data #filemanager',
+        searchInput: 'input#fl-manager-items-search'
     };
 
 
@@ -101,7 +101,10 @@ export default class FileManagerController extends SketchEngine {
 
         // Search
         this.lib('body').on('keydown', e => {
+            console.log(this.selectors);
             if (!document.querySelector(this.selectors.searchInput)) return;
+            console.log('works');
+            
             if (e.key === 'Enter' || e.keyCode === 13) {
                 e.preventDefault();
                 this.functions.search.call(this, e);
@@ -472,6 +475,7 @@ export default class FileManagerController extends SketchEngine {
                     <div class="spinner"></div>
                 </div>`);
 
+                // Window object will call renderFileManager function. Once windows object is called, renderFileManger function will be executed
                 this.functions.renderFileManager.call(this, `${this.variables.baseurl}/filemanager`, (html) => {
                     const loader = document.getElementById('dom-loader-animation');
                     if (loader) loader.remove();
@@ -536,6 +540,7 @@ export default class FileManagerController extends SketchEngine {
 
             // Search all directoreis
             // Send AJAX request to get filtered items
+            
             fetch(`${this.variables.baseurl}/filemanager/search?file_name=${e.target.value}&current_directory=${document.querySelector('[name="filemanager_path"]').value}`, {
                 method: 'GET',
                 headers: {
