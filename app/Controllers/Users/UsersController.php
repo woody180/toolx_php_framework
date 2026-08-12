@@ -1,7 +1,7 @@
 <?php namespace App\Controllers\Users;
 
 use App\Engine\Libraries\Validation;
-use \Gumlet\ImageResize;
+use Gumlet\ImageResize;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
@@ -204,7 +204,7 @@ class UsersController {
         }
        
         // Set activation key
-        $activationKey = time();
+        $activationKey = time() . bin2hex(random_bytes(7));
         $body['vkey'] = $activationKey;
 
         $body['password'] = password_hash($req->body('password'), PASSWORD_DEFAULT);
@@ -395,7 +395,7 @@ class UsersController {
             } else {
                 
                 $user = R::findOne('users', 'email = ?', [$req->body('email')]);
-                $verificationID = time();
+                $verificationID = time() . bin2hex(random_bytes(7));
 
                 if (!$user) {
                     setForm($body);
