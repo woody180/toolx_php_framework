@@ -6,7 +6,7 @@ export default class FileManagerController extends SketchEngine {
         this.variables.baseurl  = obj.baseurl;
         this.selectors.tinyArea = obj.editorClass;
         this.functions.onInsert = obj.hasOwnProperty('onInsert') ? obj.onInsert : null;
-
+        this.functions.executeGlobal.call(this);
 
         fetch(`${obj.baseurl}/filemanager/get-server-info`, {
             method: 'GET',
@@ -24,6 +24,9 @@ export default class FileManagerController extends SketchEngine {
         .catch(error => {
             console.error('Error fetching server info:', error);
         });
+
+
+        
     }
 
 
@@ -46,7 +49,8 @@ export default class FileManagerController extends SketchEngine {
 
 
     execute = [
-        'tinymceInit', 'executeGlobal'
+        'tinymceInit',
+        'executeGlobal'
     ];
 
 
@@ -455,31 +459,33 @@ export default class FileManagerController extends SketchEngine {
 
 
         // Global file manager executer
+        // This function is only for add filemanager renderer to Window object, so it can be called from anywhere
         executeGlobal() {
-            const renderFileManager = (args) => {
+            if (typeof window === 'undefined') return;
+
+            window.renderFileManager = (args = {}) => {
+                if (args && typeof args === 'object' && typeof args.onInsert === 'function') {
+                    this.functions.onInsert = args.onInsert;
+                }
+
                 document.body.insertAdjacentHTML('beforeend', `<div id="dom-loader-animation">
                     <div class="spinner"></div>
                 </div>`);
 
-                // Opening file manager
                 this.functions.renderFileManager.call(this, `${this.variables.baseurl}/filemanager`, (html) => {
+                    const loader = document.getElementById('dom-loader-animation');
+                    if (loader) loader.remove();
 
-                    document.getElementById('dom-loader-animation').remove();
-                    
                     const dialog = UIkit.modal.dialog(html);
                     const modalElement = dialog.$el;
                     modalElement.id = 'filemanager-modal';
-                    
+
                     this.functions.applyFullscreenState.call(this);
 
                     modalElement.classList.add('uk-modal-container');
                     modalElement.querySelector('.uk-modal-dialog').className = 'uk-modal-container uk-modal-dialog uk-modal-body uk-margin-auto-vertical uk-border-rounded';
-                    // modalElement.querySelector('.uk-modal-dialog').insertAdjacentHTML('afterbegin', `<button class="uk-modal-close-default" type="button" uk-close></button>`);
-                    
                 });
             };
-
-            window.renderFileManager = renderFileManager;
         },
 
 
@@ -920,7 +926,6 @@ export default class FileManagerController extends SketchEngine {
             // console.log(this.variables.selectedType);
             
         },
-        
         
         
         // Filemanager get image url and directory path
