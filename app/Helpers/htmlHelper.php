@@ -52,7 +52,7 @@ function relevantPath($content, $prepare = true)
     // If TRUE - replace to relevant URL (site URL)
     if ($prepare) {
         
-        $content = str_replace('%RELEVANT_PATH%', assetsUrl('tinyeditor/filemanager/files/'), $content ?? '');
+        $content = str_replace('%RELEVANT_PATH%', assetsUrl('images/files'), $content ?? '');
         return $content;
     } else {
         // If FALSE - replace to %RELEVANT_PATH%
