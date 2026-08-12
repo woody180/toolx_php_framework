@@ -23,6 +23,12 @@ class FileManagerController {
 
 
 
+    protected function imagedestroy($image) {
+        unset($image);
+    }
+
+
+
     protected function cacheImages($imagePath, $cachedFile) {
         $ext = strtolower(pathinfo($imagePath, PATHINFO_EXTENSION));
         if (in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp'])) {
@@ -110,8 +116,8 @@ class FileManagerController {
                         }
                         break;
                 }
-                imagedestroy($src);
-                imagedestroy($dst);
+                $this->imagedestroy($src);
+                $this->imagedestroy($dst);
             }
         }
     }
