@@ -419,22 +419,31 @@ class UsersController {
 
                 $mail = new PHPMailer(true);
                 try {
+
+                    if (ENV === 'development') {
+                        $mail->isSMTP();
+                        $mail->Host       = 'localhost';
+                        $mail->SMTPAuth   = false;
+                        $mail->Port       = 1025;
+                    } else {
+                        $mail->SMTPOptions = array(
+                            'ssl' => array(
+                                'verify_peer' => false,
+                                'verify_peer_name' => false,
+                                'allow_self_signed' => true
+                            )
+                        );
                     
-                    $mail->SMTPOptions = array(
-                        'ssl' => array(
-                            'verify_peer' => false,
-                            'verify_peer_name' => false,
-                            'allow_self_signed' => true
-                        )
-                    );
+                        $mail->isSMTP();
+                        $mail->Host       = MAIL_HOST;
+                        $mail->SMTPAuth   = true;
+                        $mail->Username   = MAIL_USERNAME;
+                        $mail->Password   = MAIL_PASSWORD;
+                        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+                        $mail->Port       = MAIL_PORT;
+                    }
                     
-                    $mail->isSMTP();
-                    $mail->Host       = MAIL_HOST;
-                    $mail->SMTPAuth   = true;
-                    $mail->Username   = MAIL_USERNAME;
-                    $mail->Password   = MAIL_PASSWORD;
-                    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-                    $mail->Port       = MAIL_PORT;
+                    
                 
                     //Recipients
                     $mail->setFrom(AUTH_MAIL, AUTH_DOMAIN);
