@@ -11,8 +11,8 @@ class FileManagerController {
     public function __construct() {
         $this->configurations = [
             'checkCacheDir' => TRUE, // Or FALSE
-            'viewPath' => 'filemanager/filemanager',
-            'fileDirectoryName' => 'images/files',
+            'viewPath' => 'filemanager/filemanager', // Path to views
+            'fileDirectoryName' => 'images/files', // Path to files
             'extensions' => ['application/zip', 'application/octet-stream', 'multipart/x-zip', 'application/zip-compressed', 'application/x-zip-compressed', 'application/x-zip', 'image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/bmp', 'audio/mp3', 'audio/mpeg', 'video/mp4', 'application/mp4', 'video/webm', 'audio/webm', 'application/pdf'],
             'validationRules' => [
                 'images' => 'max_size[50000000]|ext[jpg,jpeg,JPG,JPEG,gif,bmp,png,webp,mp3,mp4,webm,pdf]'
