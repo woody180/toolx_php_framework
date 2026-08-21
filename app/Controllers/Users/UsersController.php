@@ -109,7 +109,7 @@ class UsersController {
 
         // Login user
         $_SESSION['userid'] = $user->id;
-        return $res->redirect(baseUrl('users/profile/' . $user->id));
+        return $res->redirect(baseUrl('users/profile/' . $user->guid));
 
     }
     
@@ -211,6 +211,7 @@ class UsersController {
         $body['usergroups_id'] = 3;
         $body['activated'] = 1;
         $body['createdat'] = time();
+        $body['guid'] = bin2hex(random_bytes(16));
         
         unset($body['password_repeat']);
         unset($body['csrf_token']);
@@ -259,10 +260,16 @@ class UsersController {
 
 
     public function accountView($req, $res) {
-        $user = R::load('users', $_SESSION['userid']);
+        $user = null;
+        if (is_numeric(urlSegments('last', TRUE))) {
+            $user = R::findOne('users', 'id = ? or guid = ?', [urlSegments('last', TRUE), urlSegments('last', TRUE)]);
+        } else {
+            $user = R::load('users', $_SESSION['userid']);
+        }
 
         return $res->render('users/account', [
-            'user' => $user
+            'user' => $user,
+            'title' => 'User account'
         ]);
     }
     
@@ -358,13 +365,12 @@ class UsersController {
 
     public function profile($req, $res) {
 
-        $user = R::load('users', $req->getSegment('3'));
-
-        if (!$user->id) return abort();
+        $user = R::findOne('users', 'guid = ?', [$req->getSegment('3')]) ?? abort();
 
         return $res->render('users/profile', [
+            'title' => 'Profile',
             'user' => $user,
-            'isSelf' => (isset($_SESSION['userid']) && $user->id === $_SESSION['userid']) ? true : false
+            'isSelf' => (isset($_SESSION['userid']) && (int)$user->id === (int)$_SESSION['userid']) ? true : false
         ]);
     }
     

@@ -14,10 +14,10 @@ $router->get('users/login', 'Users/UsersController@loginView', 'Middlewares/chec
 $router->post('users/login', 'Users/UsersController@login', 'Middlewares/checkLogout');
 
 $router->get('users/account', 'Users/UsersController@accountView', 'Middlewares/checkUser');
-$router->get('users/account/(:num)', 'Users/UsersController@accountView', 'Middlewares/checkUser');
-$router->post('users/account/(:num)', 'Users/UsersController@account', 'Middlewares/checkUser');
+$router->get('users/account/(:segment)', 'Users/UsersController@accountView', 'Middlewares/checkUser');
+$router->post('users/account/(:segment)', 'Users/UsersController@account', 'Middlewares/checkUser');
 
-$router->get('users/profile/(:num)', 'Users/UsersController@profile');
+$router->get('users/profile/(:segment)', 'Users/UsersController@profile');
 $router->get('users/logout', 'Users/UsersController@logout', 'Middlewares/checkUser');
 $router->get('logout', 'Users/UsersController@logout', 'Middlewares/checkUser');
 
