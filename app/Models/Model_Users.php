@@ -79,4 +79,12 @@ class Model_Users extends RedBean_SimpleModel {
         $lastOne = R::findLast('users');
         R::trash($lastOne);
     }
+
+
+
+    public function getUser($id)
+    {
+        return R::findOne($this->bean->getMeta('type'), 'id = ? or guid = ?', [$id, $id]);
+    }
+
 }
