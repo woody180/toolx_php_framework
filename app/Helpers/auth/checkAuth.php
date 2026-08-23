@@ -9,14 +9,12 @@ function checkAuth(array $privilegies = []) {
 
     if ($id) {
 
-        $user = R::findOne('users', 'id = ?', [$id]);
+        $user = initModel('users')->getUser($id);
 
         if (is_null($user)) unset($_SESSION['userid']);
 
         if (!empty($privilegies)) {
-            if (in_array($user->usergroups->id, $privilegies))
-                return true;
-
+            if (!is_null($user->usergroups) && in_array($user->usergroups->id, $privilegies) || !is_null($user->groups) && in_array($user->groups->id, $privilegies)) return true;
             return false;
         }
 
@@ -30,4 +28,9 @@ function checkAuth(array $privilegies = []) {
 
     return false;
     
+}
+
+
+function isGuid($id) {
+    return preg_match('/^[a-f0-9]{32}$/i', $id);
 }
