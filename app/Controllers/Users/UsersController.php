@@ -228,19 +228,19 @@ class UsersController {
 
                 if (ENV === 'development') {
                     $mail->isSMTP();
-                    $mail->Host       = 'localhost';
+                    $mail->Host       = DEV_MAIL_HOST;
                     $mail->SMTPAuth   = false;
-                    $mail->Port       = 1025;
+                    $mail->Port       = DEV_MAIL_PORT;
                 } else {
                     //Server settings
                     $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
                     $mail->isSMTP();                                            //Send using SMTP
-                    $mail->Host       = 'smtp.example.com';                     //Set the SMTP server to send through
+                    $mail->Host       = MAIL_HOST;                              //Set the SMTP server to send through
                     $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-                    $mail->Username   = 'user@example.com';                     //SMTP username
-                    $mail->Password   = 'secret';                               //SMTP password
+                    $mail->Username   = MAIL_USERNAME;                          //SMTP username
+                    $mail->Password   = MAIL_PASSWORD;                          //SMTP password
                     $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
-                    $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+                    $mail->Port       = MAIL_PORT;                              //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
                 
                     //Recipients
                     $mail->setFrom($this->mailFrom, 'Mailer');
@@ -444,9 +444,9 @@ class UsersController {
 
                     if (ENV === 'development') {
                         $mail->isSMTP();
-                        $mail->Host       = 'localhost';
+                        $mail->Host       = DEV_MAIL_HOST;
                         $mail->SMTPAuth   = false;
-                        $mail->Port       = 1025;
+                        $mail->Port       = DEV_MAIL_PORT;
                     } else {
                         $mail->SMTPOptions = array(
                             'ssl' => array(
