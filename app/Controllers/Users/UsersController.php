@@ -108,7 +108,7 @@ class UsersController {
 
 
         // Login user
-        $_SESSION['userid'] = $user->id;
+        $_SESSION['userid'] = $user->guid; // Store GUID into the session
         return $res->redirect(baseUrl('users/profile/' . $user->guid));
 
     }
@@ -132,6 +132,7 @@ class UsersController {
             R::store($usersTable);
 
             ////////////////////// Create usergroups table //////////////////////
+            $usergroupsTable = null;
             foreach (['Superuser', 'Manager', 'Registered'] as $value) {
                 $usergroupsTable = R::dispense('usergroups');
                 $usergroupsTable->name = $value;
@@ -222,31 +223,41 @@ class UsersController {
 
         if ($done) {
 
-            // $mail = new PHPMailer(true);
-            // try {
-            //     //Server settings
-            //     $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
-            //     $mail->isSMTP();                                            //Send using SMTP
-            //     $mail->Host       = 'smtp.example.com';                     //Set the SMTP server to send through
-            //     $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-            //     $mail->Username   = 'user@example.com';                     //SMTP username
-            //     $mail->Password   = 'secret';                               //SMTP password
-            //     $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
-            //     $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+            $mail = new PHPMailer(true);
+            try {
+
+                if (ENV === 'development') {
+                    $mail->isSMTP();
+                    $mail->Host       = 'localhost';
+                    $mail->SMTPAuth   = false;
+                    $mail->Port       = 1025;
+                } else {
+                    //Server settings
+                    $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+                    $mail->isSMTP();                                            //Send using SMTP
+                    $mail->Host       = 'smtp.example.com';                     //Set the SMTP server to send through
+                    $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+                    $mail->Username   = 'user@example.com';                     //SMTP username
+                    $mail->Password   = 'secret';                               //SMTP password
+                    $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
+                    $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+                
+                    //Recipients
+                    $mail->setFrom($this->mailFrom, 'Mailer');
+                    $mail->addAddress($req->body('email'));
+                
+                    //Content
+                    $mail->isHTML(true);
+                    $mail->Subject = 'Validate user account';
+                    $mail->Body    = '<a href="'.baseUrl('users/activation?vkey='.$activationKey.'').'">Account activateion on '. baseUrl().'. Follow the link for activation. </a>';
+
+                }
+
             
-            //     //Recipients
-            //     $mail->setFrom($this->mailFrom, 'Mailer');
-            //     $mail->addAddress($req->body('email'));
-            
-            //     //Content
-            //     $mail->isHTML(true);
-            //     $mail->Subject = 'Validate user account';
-            //     $mail->Body    = '<a href="'.baseUrl('users/activation?vkey='.$activationKey.'').'">Account activateion on '. baseUrl().'. Follow the link for activation. </a>';
-            
-            //     $mail->send();
-            // } catch (Exception $e) {
-            //     echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
-            // }
+                $mail->send();
+            } catch (Exception $e) {
+                echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+            }
 
 
             setFlashData('success', \App\Engine\Libraries\Languages::translate('auth.user_register_success'));
@@ -260,12 +271,10 @@ class UsersController {
 
 
     public function accountView($req, $res) {
-        $user = null;
-        if (is_numeric(urlSegments('last', TRUE))) {
-            $user = R::findOne('users', 'id = ? or guid = ?', [urlSegments('last', TRUE), urlSegments('last', TRUE)]);
-        } else {
-            $user = R::load('users', $_SESSION['userid']);
-        }
+        $user = initModel('users')->getUser(urlSegments('last', TRUE));
+
+        if (!isset($_SESSION['userid']) && !$user) abort();
+        if (!$user) $user = initModel('users')->getUser($_SESSION['userid']) ?? abort();
 
         return $res->render('users/account', [
             'user' => $user,
@@ -281,6 +290,13 @@ class UsersController {
 
         // User ID
         $id = $req->getSegment('3');
+
+        // Validate GUID
+        if (isGuid($id) !== 1) {
+            setFlashData('error', 'Request with bad user ID');
+            return $res->redirectBack();
+        }
+
 
         // Validate
         $errors = $this->validation
