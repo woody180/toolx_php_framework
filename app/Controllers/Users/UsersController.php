@@ -210,7 +210,7 @@ class UsersController {
 
         $body['password'] = password_hash($req->body('password'), PASSWORD_DEFAULT);
         $body['usergroups_id'] = 3;
-        $body['activated'] = 1;
+        $body['activated'] = 0;
         $body['createdat'] = time();
         $body['guid'] = bin2hex(random_bytes(16));
         
@@ -241,20 +241,21 @@ class UsersController {
                     $mail->Password   = MAIL_PASSWORD;                          //SMTP password
                     $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
                     $mail->Port       = MAIL_PORT;                              //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
-                
-                    //Recipients
-                    $mail->setFrom($this->mailFrom, 'Mailer');
-                    $mail->addAddress($req->body('email'));
-                
-                    //Content
-                    $mail->isHTML(true);
-                    $mail->Subject = 'Validate user account';
-                    $mail->Body    = '<a href="'.baseUrl('users/activation?vkey='.$activationKey.'').'">Account activateion on '. baseUrl().'. Follow the link for activation. </a>';
-
                 }
 
+                // Recipients
+                $mail->setFrom($this->mailFrom, AUTH_DOMAIN);
+                $mail->addAddress($req->body('email'));
             
+                //Content
+                $mail->isHTML(true);
+                $mail->CharSet = 'UTF-8';
+                
+                $mail->Subject = 'Validate user account';
+                $mail->Body    = '<a href="'.baseUrl('users/activation?vkey='.$activationKey.'').'">Account activateion on '. baseUrl().'. Follow the link for activation. </a>';
+
                 $mail->send();
+                
             } catch (Exception $e) {
                 echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
             }
