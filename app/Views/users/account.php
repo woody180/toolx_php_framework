@@ -9,7 +9,7 @@
                     
                     <div class="uk-flex uk-flex-between uk-flex-middle">
                         <p class="uk-text-lead"><?= lang('auth.profile_edit') ?></p>
-                        <a href="<?= baseUrl("users/profile/" . $_SESSION['userid']) ?>"><span uk-icon="icon: arrow-left; ratio: 1"></span> <?= lang('auth.back_to_profile') ?></a>
+                        <a href="<?= baseUrl("users/profile/" . $user->guid) ?>"><span uk-icon="icon: arrow-left; ratio: 1"></span> <?= lang('auth.back_to_profile') ?></a>
                     </div>
                     
                     <?php if (hasFlashData('error')): ?>
@@ -84,7 +84,7 @@
                         <div id="account-buttons-set" class="uk-flex uk-flex-between uk-flex-middle">
                             <button class="uk-button uk-button-primary" type="submit"><?= lang('auth.update_profile') ?></button>
                             
-                            <a href="<?= baseUrl("users/profile/" . $_SESSION['userid']) ?>"><span uk-icon="icon: arrow-left; ratio: 1"></span> <?= lang('auth.back_to_profile') ?></a>
+                            <a href="<?= baseUrl("users/profile/" . $user->guid) ?>"><span uk-icon="icon: arrow-left; ratio: 1"></span> <?= lang('auth.back_to_profile') ?></a>
                         </div>
                     </form>
                 </div>
