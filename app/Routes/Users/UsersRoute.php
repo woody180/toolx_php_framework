@@ -6,7 +6,8 @@ use App\Engine\Libraries\Router;
 $router = Router::getInstance();
 
 $router->get('users', 'Users/UsersController@index', 'Middlewares/checkLogout');
-//$router->get('users/reset', 'Users/UsersController@reset', 'Middlewares/checkLogout');
+$router->get('users/reset', 'Users/UsersController@reset', 'Middlewares/checkLogout');
+$router->get('users/activation', 'Users/UsersController@activation', 'Middlewares/checkLogout');
 $router->get('users/register', 'Users/UsersController@registerView', 'Middlewares/checkLogout');
 $router->post('users/register', 'Users/UsersController@register', 'Middlewares/checkLogout');
 
