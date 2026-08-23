@@ -9,7 +9,7 @@ define("MAIL_PASSWORD", "");
 define("MAIL_PORT", 587);
 
 // DEVELOPMENT
-define("DEV_AUTH_DOMAIN", "");
+define("DEV_AUTH_DOMAIN", "your_domain_name");
 define("DEV_AUTH_MAIL", "");
 define("DEV_MAIL_HOST", "localhost");
 define("DEV_MAIL_USERNAME", "");
