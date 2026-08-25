@@ -503,7 +503,8 @@ class UsersController {
                 if ($user) {
                     $user->import([
                         'vkey' => null,
-                        'password' => $_SESSION["key_$verification"]
+                        'password' => $_SESSION["key_$verification"],
+                        'activated' => 1
                     ]);
                     R::store($user);
                     
