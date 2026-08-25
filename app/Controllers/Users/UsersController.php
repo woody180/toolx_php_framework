@@ -276,6 +276,7 @@ class UsersController {
 
         if (!isset($_SESSION['userid']) && !$user) abort();
         if (!$user) $user = initModel('users')->getUser($_SESSION['userid']) ?? abort();
+        if (!checkAuth([1]) && $_SESSION['userid'] != $user->guid) abort(['code' => 401]);
 
         return $res->render('users/account', [
             'user' => $user,
@@ -355,10 +356,17 @@ class UsersController {
         unset($body['avatar_hidden']);
         unset($body['password_repeat']);
 
-        // Check email
-        if ($req->body('email') != $user->email && R::findOne('users', 'email = ?', [$req->body('email')])) {
+        // Check email belongs to logged in user
+        if (!checkAuth([1]) && $req->body('email') != $user->email && R::findOne('users', 'email = ?', [$req->body('email')])) {
             setFlashData('errors', ['email' => [\App\Engine\Libraries\Languages::translate('auth.mail_taken')]]);
             setForm($body);
+            return $res->redirectBack();
+        }
+
+        // Check if logged in user is admin or not and if not then check if account owner is same as logged in user.
+        if (!checkAuth([1]) && $user->guid != $_SESSION['userid']) {
+            setFlashData('error', 'User in not authorized!');
+            header('HTTP/1.1 401 Unauthorized', true, 401);
             return $res->redirectBack();
         }
         
