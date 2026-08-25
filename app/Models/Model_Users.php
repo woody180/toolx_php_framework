@@ -84,7 +84,8 @@ class Model_Users extends RedBean_SimpleModel {
 
     public function getUser($id)
     {
-        return R::findOne($this->bean->getMeta('type'), 'id = ? or guid = ?', [$id, $id]);
+        $condition = (isGuid($id)) ? 'guid = ?' : 'id = ?';
+        return R::findOne($this->bean->getMeta('type'), $condition, [$id]);
     }
 
 }
