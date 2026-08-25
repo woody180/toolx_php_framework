@@ -33,7 +33,7 @@
                     </div>
                     <?php endif; ?>
 
-                    <form enctype="multipart/form-data" id="alter-login-form" class="alter-login-form uk-grid-medium uk-child-width-1-1k" uk-grid action="<?= baseUrl("users/account/" . $_SESSION['userid']) ?>" method="POST" accept-charset="utf-8">
+                    <form enctype="multipart/form-data" id="alter-login-form" class="alter-login-form uk-grid-medium uk-child-width-1-1k" uk-grid action="<?= baseUrl("users/account/" . urlSegments('last', true)) ?>" method="POST" accept-charset="utf-8">
                         
                         <?= csrf_field() ?>
                         
