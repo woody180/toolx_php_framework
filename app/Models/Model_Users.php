@@ -66,7 +66,8 @@ class Model_Users extends RedBean_SimpleModel {
             'avatar' => '',
             'vkey' => '',
             'activated' => '',
-            'createdat' => 11111111
+            'createdat' => time(),
+            'guid' => bin2hex(random_bytes(16))
         ]);
         $usergroups = R::dispense('usergroups');
         $users->usergroups = $usergroups;
