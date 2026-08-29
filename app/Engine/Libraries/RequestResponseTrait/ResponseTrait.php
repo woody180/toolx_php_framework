@@ -87,12 +87,12 @@ trait ResponseTrait {
 
 
     // Redirect back
-    public function redirectBack() {
+    public function redirectBack(string $urlBound = '') {
 
         if (hasFlashData('previous_url'))
-            return $this->redirect(URLROOT . "/" . getFlashData('previous_url'));
+            return $this->redirect(URLROOT . "/" . getFlashData('previous_url') . $urlBound);
         else {
-            return $this->redirect(URLROOT);
+            return $this->redirect(URLROOT . $urlBound);
         }
     }
 }
