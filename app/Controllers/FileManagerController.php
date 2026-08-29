@@ -30,7 +30,8 @@ class FileManagerController {
 
 
     protected function cacheImages($imagePath, $cachedFile) {
-        $ext = strtolower(pathinfo($imagePath, PATHINFO_EXTENSION));
+        // $ext = strtolower(pathinfo($imagePath, PATHINFO_EXTENSION));
+        $ext = strtolower(str_replace('image/', '', mime_content_type($imagePath)));
         if (in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp'])) {
             switch ($ext) {
                 case 'jpg':
