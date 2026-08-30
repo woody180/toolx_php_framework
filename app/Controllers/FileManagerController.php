@@ -29,9 +29,16 @@ class FileManagerController {
 
 
 
+    private function getImageExt(string $imagePath):string
+    {
+        return strtolower(str_replace('image/', '', mime_content_type($imagePath)));
+    }
+
+
+
     protected function cacheImages($imagePath, $cachedFile) {
         // $ext = strtolower(pathinfo($imagePath, PATHINFO_EXTENSION));
-        $ext = strtolower(str_replace('image/', '', mime_content_type($imagePath)));
+        $ext = $this->getImageExt($imagePath);
         if (in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp'])) {
             switch ($ext) {
                 case 'jpg':
@@ -391,7 +398,8 @@ class FileManagerController {
             if (is_file($directory)) {
                 unlink($directory);
                 
-                $ext = strtolower(pathinfo($directory, PATHINFO_EXTENSION));
+                // $ext = strtolower(pathinfo($directory, PATHINFO_EXTENSION));
+                $ext = $this->getImageExt($directory);
                 if (in_array($ext, $this->configurations['imageExtensions'])) {
                     if (file_exists($cachedDirectory)) {
                         unlink($cachedDirectory);
@@ -511,7 +519,8 @@ class FileManagerController {
         // Perform rename operation
         if (rename($oldPath, $newPath)) {
             // Also rename cache file if it's an image
-            $ext = strtolower(pathinfo($oldPath, PATHINFO_EXTENSION));
+            // $ext = strtolower(pathinfo($oldPath, PATHINFO_EXTENSION));
+            $ext = $this->getImageExt($oldPath);
             if (in_array($ext, $this->configurations['imageExtensions'])) {
                 $cacheDir = $currentDirectory . '/.cache';
                 $oldCachePath = $cacheDir . '/' . basename($oldName);
@@ -606,7 +615,8 @@ class FileManagerController {
             if (strpos($file->getPathname(), '.cache') !== false) continue;
 
             // Get the file name without the extension
-            $fileNameWithoutExt = strtolower(pathinfo($file->getFilename(), PATHINFO_FILENAME));
+            // $fileNameWithoutExt = strtolower(pathinfo($file->getFilename(), PATHINFO_FILENAME));
+            $fileNameWithoutExt = $this->getImageExt($file->getFilename());
             
             // Check if the file name matches the search term
             if (strpos($fileNameWithoutExt, $searchTerm) !== false) {
