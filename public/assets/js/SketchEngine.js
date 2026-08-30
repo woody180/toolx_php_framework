@@ -131,6 +131,10 @@ export default class SketchEngine {
                 this.el().forEach(el => el.removeAttribute(param))
             },
             
+            toggleClass(className) {
+                this.el().forEach(el => el.classList.toggle(className));
+            },
+            
             addClass(param) {
                 this.el().forEach(el => el.classList.add(param))
             },
@@ -169,7 +173,7 @@ export default class SketchEngine {
 
             text(msg = undefined) {
                 if (msg === undefined) {
-                    return el.innerText;
+                    return this.el()[0].innerText;
                 } else {
                     this.el().forEach(el => {
                         el.innerText = msg;
@@ -179,7 +183,7 @@ export default class SketchEngine {
 
             html(data = undefined) {
                 if (data === undefined) {
-                    return el.innerHTML;
+                    return this.el()[0].innerHTML;
                 } else {
                     this.el().forEach(el => {
                         el.innerHTML = data;
@@ -275,7 +279,21 @@ export default class SketchEngine {
                 }
                 
                 return object;
+            },
+            
+                        // URL Query Object
+            queryObj(key = undefined) {
+                
+                const params = new Proxy(new URLSearchParams(window.location.search), {
+                    get: (searchParams, prop) => searchParams.get(prop),
+                });
+
+                if (key)
+                    return params[key];
+                
+                return params;
             }
+
         }
     }
 
