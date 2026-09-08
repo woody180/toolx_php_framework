@@ -67,7 +67,8 @@ export default class FileManagerController extends SketchEngine {
         searchAllCheckbox: '#fl-search-all',
         clearSearchButton: '#fl-clear-search-icon',
         gridContainer: '#fl-modal-data #filemanager',
-        searchInput: 'input#fl-manager-items-search'
+        searchInput: 'input#fl-manager-items-search',
+        breadcrumbs: 'a.filemanager-breadcrumb-tag'
     };
 
 
@@ -78,6 +79,23 @@ export default class FileManagerController extends SketchEngine {
 
 
     bindEvents() {
+
+        // Breadcrumbs
+        this.lib('body').on('click', e => {
+            e.preventDefault();
+            
+            const url = e.target.closest('a').getAttribute('href');
+
+            this.variables.filemanagerDirectory = url;
+            
+            this.functions.renderFileManager.call(this, url, function(html) {
+                const modalElement = document.querySelector('#filemanager').closest('.uk-modal').querySelector('.uk-modal-body');
+                modalElement.innerHTML = html;  
+            });
+
+            e.stopPropagation();
+        }, this.selectors.breadcrumbs);
+
         // File manager events
         this.lib('body').on('click', e => {
             e.preventDefault();

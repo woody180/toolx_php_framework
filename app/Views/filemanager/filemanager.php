@@ -182,6 +182,9 @@
 
 <div id="fl-server-info" class="uk-position-bottom-left uk-background-muted uk-width-1-1 uk-flex uk-flex-between uk-flex-middle">
     <!-- <progress id="js-progressbar" class="uk-progress uk-margin-small-bottom uk-hidden" value="10" max="100"></progress> -->
+
+    <div class="uk-position-relative"><?= isset($breadcrumbs) ? $breadcrumbs : '' ?></div>
+
     <p class="uk-text-muted uk-margin-remove">
         <?php
         $maxFileUploads = ini_get('max_file_uploads');

@@ -15,7 +15,7 @@ class FileManagerController {
             'fileDirectoryName' => 'images/files', // Path to files
             'extensions' => ['application/zip', 'application/octet-stream', 'multipart/x-zip', 'application/zip-compressed', 'application/x-zip-compressed', 'application/x-zip', 'image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/bmp', 'audio/mp3', 'audio/mpeg', 'video/mp4', 'application/mp4', 'video/webm', 'audio/webm', 'application/pdf'],
             'validationRules' => [
-                'images' => 'max_size[50000000]|ext[jpg,jpeg,JPG,JPEG,gif,bmp,png,webp,mp3,mp4,webm,pdf]'
+                'allowedFiles' => 'max_size[50000000]|ext[jpg,jpeg,JPG,JPEG,gif,bmp,png,webp,mp3,mp4,webm,pdf]'
             ],
             'imageExtensions' => ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp']
         ];
@@ -31,15 +31,22 @@ class FileManagerController {
 
     private function getImageExt(string $imagePath):string
     {
-        return strtolower(str_replace('image/', '', mime_content_type($imagePath)));
+        // Check if mime type includes 'image/'
+        $mimeType = mime_content_type($imagePath);
+
+        // Check if mime type is not empty
+        if (strpos($mimeType, 'image/') !== 0) return '';
+
+        // Return image extension
+        return strtolower(substr($mimeType, strlen('image/')));
     }
 
 
 
-    protected function cacheImages($imagePath, $cachedFile) {
+    protected function cacheImages(string $imagePath, string $cachedFile) {
         // $ext = strtolower(pathinfo($imagePath, PATHINFO_EXTENSION));
         $ext = $this->getImageExt($imagePath);
-        if (in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp'])) {
+        if (in_array($ext, $this->configurations['imageExtensions'])) {
             switch ($ext) {
                 case 'jpg':
                 case 'jpeg':
@@ -293,13 +300,23 @@ class FileManagerController {
             return $timeB - $timeA;
         });
 
+        $breadcrumbPath = str_replace('/assets/' . $this->configurations['fileDirectoryName'], '', $this->currentUrl);
+        $breadcrumbs = '<a class="filemanager-breadcrumb-tag" href="/filemanager"><span uk-icon="icon: home; ratio: .65";></span></a>';
+        $buildBreadcrumbsLink = '';
+        foreach (array_filter(explode('/', trim($breadcrumbPath, '/')), 'strlen') as $breadcrumb) {
+            $buildBreadcrumbsLink .= $breadcrumb . '/';
+            $breadcrumbs .= '<a class="filemanager-breadcrumb-tag" href="filemanager/'.$buildBreadcrumbsLink.'"><span>' . htmlspecialchars($breadcrumb, ENT_QUOTES, 'UTF-8') . '</span</a>';
+        }
+        
+
         return $res->render($this->configurations['viewPath'], [
             'items' => $items, // Loaded files
             'currentUrl' => $this->currentUrl, // URL to the storage where files are stored and in which folder it is right now
             'baseUrl' => $baseUrl, // URL to the storage where files are stored
             'legacyUrl' => $legacyUrl, // URL to file manager route - https://sitename/filemanager
             'backUrl' => $backUrl, // This url is for back button
-            'deep_search' => FALSE
+            'deep_search' => FALSE,
+            'breadcrumbs' => $breadcrumbs
         ]);
     }
 
@@ -312,7 +329,7 @@ class FileManagerController {
         $errors = $validation
             ->with(['images' => $req->files('images')->show()])
             ->rules([
-                'images' => $this->configurations['validationRules']['images'],
+                'images' => $this->configurations['validationRules']['allowedFiles'],
             ])
             ->validate();
         
@@ -397,14 +414,7 @@ class FileManagerController {
 
             if (is_file($directory)) {
                 unlink($directory);
-                
-                // $ext = strtolower(pathinfo($directory, PATHINFO_EXTENSION));
-                $ext = $this->getImageExt($directory);
-                if (in_array($ext, $this->configurations['imageExtensions'])) {
-                    if (file_exists($cachedDirectory)) {
-                        unlink($cachedDirectory);
-                    }
-                }
+                if (file_exists($cachedDirectory)) unlink($cachedDirectory);
             } else {
                 rrmdir($directory);
             }
@@ -519,16 +529,11 @@ class FileManagerController {
         // Perform rename operation
         if (rename($oldPath, $newPath)) {
             // Also rename cache file if it's an image
-            // $ext = strtolower(pathinfo($oldPath, PATHINFO_EXTENSION));
-            $ext = $this->getImageExt($oldPath);
-            if (in_array($ext, $this->configurations['imageExtensions'])) {
-                $cacheDir = $currentDirectory . '/.cache';
-                $oldCachePath = $cacheDir . '/' . basename($oldName);
-                $newCachePath = $cacheDir . '/' . $newName;
-                if (file_exists($oldCachePath)) {
-                    rename($oldCachePath, $newCachePath);
-                }
-            }
+            
+            $cacheDir = $currentDirectory . '/.cache';
+            $oldCachePath = $cacheDir . '/' . basename($oldName);
+            $newCachePath = $cacheDir . '/' . $newName;
+            if (file_exists($oldCachePath)) rename($oldCachePath, $newCachePath);
 
             return $res->send(['success' => 'Item renamed successfully.']);
         } else {
@@ -615,8 +620,7 @@ class FileManagerController {
             if (strpos($file->getPathname(), '.cache') !== false) continue;
 
             // Get the file name without the extension
-            // $fileNameWithoutExt = strtolower(pathinfo($file->getFilename(), PATHINFO_FILENAME));
-            $fileNameWithoutExt = $this->getImageExt($file->getFilename());
+            $fileNameWithoutExt = strtolower(pathinfo($file->getFilename(), PATHINFO_FILENAME));
             
             // Check if the file name matches the search term
             if (strpos($fileNameWithoutExt, $searchTerm) !== false) {
@@ -716,7 +720,8 @@ class FileManagerController {
             'baseUrl' => $baseUrl,
             'legacyUrl' => url_to('FileManagerController@index'),
             'backUrl' => url_to('FileManagerController@index'),
-            'deep_search' => TRUE
+            'deep_search' => TRUE,
+            'breadcrumbs' => 'Search results for: ' . $searchTerm
         ]);
 
 
