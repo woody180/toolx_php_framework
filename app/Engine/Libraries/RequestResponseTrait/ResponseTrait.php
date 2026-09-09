@@ -13,7 +13,14 @@ trait ResponseTrait {
     
     
     // Respond as JSON
-    public function send($obj) {
+    public function send(object|array $obj)
+    {
+        header("Content-Type: application/json; charset=UTF-8");
+        echo toJSON($obj);
+    }
+    
+    // Respond as JSON
+    public function json(object|array $obj) {
         header("Content-Type: application/json; charset=UTF-8");
         echo toJSON($obj);
     }
