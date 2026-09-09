@@ -32,5 +32,6 @@ function checkAuth(array $privilegies = []) {
 
 
 function isGuid($id) {
+    if (is_null($id) || empty($id)) return false;
     return preg_match('/^[a-f0-9]{32}$/i', $id);
 }
