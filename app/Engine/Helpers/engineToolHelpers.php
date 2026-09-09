@@ -97,7 +97,7 @@ function pager(array $params) {
 
 
 
-function rrmdir($dir) { 
+function rrmdir( string $dir ) {
     if (is_dir($dir)) { 
         $objects = scandir($dir);
         foreach ($objects as $object) { 
@@ -113,20 +113,21 @@ function rrmdir($dir) {
 }
 
 
-function isJSON($string){
+function isJSON(string $string) : bool
+{
     return is_string($string) && is_array(json_decode($string, true)) ? true : false;
 }
 
 
 
-function toJSON($fileArray) {
+function toJSON(object|array $fileArray) {
     $json = json_encode($fileArray, JSON_PRETTY_PRINT | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);
     return $json;
 }
 
 
 
-function toArray($array) {
+function toArray(object|array $array) {
     if (is_array($array)) {
         foreach ($array as $key => $value) {
             if (is_array($value)) {
