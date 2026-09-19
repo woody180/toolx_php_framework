@@ -270,10 +270,11 @@ export default class FileManagerController extends SketchEngine {
             // Create folder name / directory name
             let folderName = prompt('Folder name');
             if (!folderName) return alert('You must add a name to the directory!');
-            folderName = folderName.toLowerCase();
-            folderName = folderName.trim();
-            folderName = folderName.replace(/\s+/g, '_');
-            folderName = folderName.replace(/[^a-z0-9_-]/g, '');
+            folderName = folderName
+                .toLowerCase()
+                .trim()
+                .replace(/\s+/g, '_')
+                .replace(/[^\p{L}\p{N}_-]/gu, '');
 
             const url = `${this.variables.baseurl}/filemanager/create-directory`;
             const csrfToken = document.querySelector('[name="csrf_token"]').value;
@@ -844,7 +845,7 @@ export default class FileManagerController extends SketchEngine {
                 method: 'GET',
                 headers: {
                     "X-Requested-With": "XMLHttpRequest",
-                    "Content-Type": "text/html",
+                    "Content-Type": "text/html; charset=UTF-8"
                 },
             })
             .then(response => response.text())

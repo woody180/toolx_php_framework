@@ -32,7 +32,8 @@ class FileManagerController {
     private function getImageExt(string $imagePath):string
     {
         // Check if mime type includes 'image/'
-        $mimeType = mime_content_type($imagePath);
+        $path = rawurldecode($imagePath);
+        $mimeType = mime_content_type($path);
 
         // Check if mime type is not empty
         if (strpos($mimeType, 'image/') !== 0) return '';
@@ -159,15 +160,15 @@ class FileManagerController {
         if (count($params) > 0) {
             foreach ($params as $param) {
                 $safeParam = str_replace(['..', '/', '\\'], '', $param);
-                $this->currentUrl .= '/' . urlencode($safeParam);
+                $this->currentUrl .= '/' . $safeParam;
                 $filesPath .= '/' . $safeParam;
-                $legacyUrl .= '/' . urlencode($safeParam);
+                $legacyUrl .= '/' . $safeParam;
             }
         }
    
         // Handle directories with spaces in their names
-        $filesPath = str_replace('%20', ' ', $filesPath);
-    
+        $filesPath = str_replace('%20', ' ', rawurldecode(urldecode($filesPath)));
+
         // Check if directory exists
         if (!is_dir($filesPath)) abort(['code' => 403, 'text' => 'File manager directory does not exist. Please check configurations.']);
 
@@ -305,7 +306,7 @@ class FileManagerController {
         $buildBreadcrumbsLink = '';
         foreach (array_filter(explode('/', trim($breadcrumbPath, '/')), 'strlen') as $breadcrumb) {
             $buildBreadcrumbsLink .= $breadcrumb . '/';
-            $breadcrumbs .= '<a class="filemanager-breadcrumb-tag" href="filemanager/'.$buildBreadcrumbsLink.'"><span>' . htmlspecialchars($breadcrumb, ENT_QUOTES, 'UTF-8') . '</span</a>';
+            $breadcrumbs .= '<a class="filemanager-breadcrumb-tag" href="filemanager/'.$buildBreadcrumbsLink.'"><span>' . htmlspecialchars(urldecode($breadcrumb), ENT_QUOTES, 'UTF-8') . '</span</a>';
         }
         
 
@@ -316,7 +317,7 @@ class FileManagerController {
             'legacyUrl' => $legacyUrl, // URL to file manager route - https://sitename/filemanager
             'backUrl' => $backUrl, // This url is for back button
             'deep_search' => FALSE,
-            'breadcrumbs' => $breadcrumbs
+            'breadcrumbs' => urldecode($breadcrumbs)
         ]);
     }
 
@@ -345,12 +346,12 @@ class FileManagerController {
 
         // Upload files
         try {
-           
-            $uploadedFiles = $req->files('images')->upload(dirname(APPROOT) . "/public{$req->body('uploadDir')}");
+            $decodedFilesPath = rawurldecode(dirname(APPROOT) . "/public/".urldecode($req->body('uploadDir')));
+            $uploadedFiles = $req->files('images')->upload($decodedFilesPath);
 
             // Check if chache directory exists for this directory
-            $cacheDir = dirname(APPROOT) . "/public" . $req->body('uploadDir') . '/.cache';
-            if (!is_dir($cacheDir)) mkdir($cacheDir, 0755);
+            $cacheDir = dirname(APPROOT) . "/public" . rawurldecode(urldecode($req->body('uploadDir'))) . '/.cache';
+            if (!is_dir($cacheDir)) mkdir($cacheDir, 0755, true);
 
             foreach($uploadedFiles as $key => $imagePath) {
                 $cachedFile = $cacheDir . '/' . basename($imagePath);
@@ -390,7 +391,7 @@ class FileManagerController {
     public function makeDirectory($req, $res) {
 
         $newFolderName = $req->body('dirname');
-        $whereToCreate = dirname(APPROOT) . "/public" . $req->body('current_directory') . "/" . $newFolderName;
+        $whereToCreate = rawurldecode(urldecode(dirname(APPROOT) . "/public" . $req->body('current_directory') . "/" . $newFolderName));
 
         // Check if folder already exists
         if (file_exists($whereToCreate)) return $res->send(['error' => 'Such directory already exists.']);
@@ -428,7 +429,7 @@ class FileManagerController {
     // Compress to zip
     public function compress($req, $res) {
         foreach ($req->body('items') as $item) {
-            $zipFileName = dirname(APPROOT) . "/public" . $req->body('current_directory') . "/archive_" . date('Ymd_His') . ".zip";
+            $zipFileName = rawurldecode(dirname(APPROOT) . "/public" . urldecode($req->body('current_directory')) . "/archive_" . date('Ymd_His') . ".zip");
             $zip = new \ZipArchive();
             if ($zip->open($zipFileName, \ZipArchive::CREATE) === TRUE) {
                 foreach ($req->body('items') as $item) {
@@ -463,7 +464,7 @@ class FileManagerController {
 
     // Unzip
     public function unzip($req, $res) {
-        $extractTo = dirname(APPROOT) . "/public" . $req->body('current_directory');
+        $extractTo = rawurldecode(dirname(APPROOT) . "/public" . urldecode($req->body('current_directory')));
         $zipFile = $req->body('zip_file');
         $zipFile = reset($zipFile);
         $zipFile = basename($zipFile);
@@ -508,7 +509,7 @@ class FileManagerController {
 
         // If new name has no extension than add _ symbol to name spaces
         if ($extName == '') $newName = preg_replace('/\s+/', '_', $newName);
-        $currentDirectory = dirname(APPROOT) . "/public" . $req->body('current_directory');
+        $currentDirectory = rawurldecode(dirname(APPROOT) . "/public" . urldecode($req->body('current_directory')));
 
         // Sanitize new name
         $newName = str_replace(['..', '/', '\\'], '', $newName);
