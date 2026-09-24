@@ -14,11 +14,11 @@ class HomeController {
 
 
     public function about($req, $res) {
-        return $res->send('about');
+        return $res->send(['about page']);
     }
 
     
     public function gallery($req, $res) {
-        return $res->send('gallery page');
+        return $res->json(['gallery page']);
     }
 }
