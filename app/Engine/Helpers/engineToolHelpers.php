@@ -120,7 +120,7 @@ function isJSON(string $string) : bool
 
 
 
-function toJSON(object|array $fileArray) {
+function toJSON(mixed $fileArray) {
     $json = json_encode($fileArray, JSON_PRETTY_PRINT | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);
     return $json;
 }
