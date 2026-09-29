@@ -113,7 +113,7 @@ function rrmdir( string $dir ) {
 }
 
 
-function isJSON(string $string) : bool
+function isJSON(mixed $string) : bool
 {
     return is_string($string) && is_array(json_decode($string, true)) ? true : false;
 }
